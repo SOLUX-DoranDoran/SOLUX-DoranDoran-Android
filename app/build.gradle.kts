@@ -136,9 +136,4 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
-    // Naver Map
-    implementation(libs.naver.map.compose)
-    implementation(libs.naver.map.location)
-    implementation(libs.play.services.location)
-
 }
