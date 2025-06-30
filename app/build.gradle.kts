@@ -15,11 +15,11 @@ val properties =
 
 
 android {
-    namespace = "com.moduro.barrier_free_app"
+    namespace = "com.solux.dorandoran"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.moduro.barrier_free_app"
+        applicationId = "com.solux.dorandoran"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

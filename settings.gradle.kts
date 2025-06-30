@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "barrier_free_app"
+rootProject.name = "dorandoran"
 include(":app")
