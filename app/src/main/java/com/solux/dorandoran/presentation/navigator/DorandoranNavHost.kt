@@ -19,8 +19,8 @@ import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.main.navigation.mainNavGraph
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.mypageNavGraph
-import com.solux.dorandoran.presentation.writing.navigation.WritingNavigator
-import com.solux.dorandoran.presentation.writing.navigation.writingNavGraph
+import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
+import com.solux.dorandoran.presentation.review.navigation.reviewNavGraph
 
 
 @Composable
@@ -31,7 +31,7 @@ fun DoranDoranNavHost(
     mainNavigator: MainNavigator,
     homeNavigator: HomeNavigator,
     discussNavigator: DiscussNavigator,
-    writingNavigator: WritingNavigator,
+    reviewNavigator: ReviewNavigator,
     mypageNavigator: MypageNavigator
 ) {
     Box(
@@ -49,12 +49,12 @@ fun DoranDoranNavHost(
                 mainNavigator,
                 homeNavigator,
                 discussNavigator,
-                writingNavigator,
+                reviewNavigator,
                 mypageNavigator
             )
             homeNavGraph(homeNavigator)
             discussNavGraph(discussNavigator)
-            writingNavGraph(writingNavigator)
+            reviewNavGraph(reviewNavigator)
             mypageNavGraph(mypageNavigator)
 
         }

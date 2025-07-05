@@ -37,8 +37,8 @@ import com.solux.dorandoran.presentation.home.screen.HomeRoute
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
-import com.solux.dorandoran.presentation.writing.navigation.WritingNavigator
-import com.solux.dorandoran.presentation.writing.screen.WritingRoute
+import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
+import com.solux.dorandoran.presentation.review.screen.ReviewRoute
 
 
 @Composable
@@ -69,7 +69,7 @@ fun MainScreen(
         BottomNavigationItem(
             selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
             unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
-            label = "글쓰기"
+            label = "리뷰"
         ),
         BottomNavigationItem(
             selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
@@ -124,7 +124,7 @@ fun MainScreen(
 
                 }
                 2 -> {
-                    WritingRoute(navigator = WritingNavigator(navController = navController))
+                    ReviewRoute(navigator = ReviewNavigator(navController = navController))
                 }
                 3 -> {
                     MypageRoute(navigator = MypageNavigator(navController = navController))

@@ -30,7 +30,7 @@ import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.navigator.DoranDoranNavHost
-import com.solux.dorandoran.presentation.writing.navigation.WritingNavigator
+import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
 import com.solux.dorandoran.util.toast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                 val mainNavigator = remember(navController) { MainNavigator(navController) }
                 val homeNavigator = remember(navController) { HomeNavigator(navController) }
                 val discussNavigator = remember(navController) { DiscussNavigator(navController) }
-                val writingNavigator = remember(navController) { WritingNavigator(navController) }
+                val reviewNavigator = remember(navController) { ReviewNavigator(navController) }
                 val mypageNavigator = remember(navController) { MypageNavigator(navController) }
 
 
@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                             mainNavigator = mainNavigator,
                             homeNavigator = homeNavigator,
                             discussNavigator = discussNavigator,
-                            writingNavigator = writingNavigator,
+                            reviewNavigator = reviewNavigator,
                             mypageNavigator = mypageNavigator
                                                     )
                     }

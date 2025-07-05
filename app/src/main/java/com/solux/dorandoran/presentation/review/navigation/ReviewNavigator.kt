@@ -1,8 +1,8 @@
-package com.solux.dorandoran.presentation.writing.navigation
+package com.solux.dorandoran.presentation.review.navigation
 
 import androidx.navigation.NavController
 
-class WritingNavigator(
+class ReviewNavigator(
     val navController: NavController
 ){
 
