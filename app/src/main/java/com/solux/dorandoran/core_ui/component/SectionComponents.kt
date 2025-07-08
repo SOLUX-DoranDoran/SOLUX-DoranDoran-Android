@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.core_ui.theme.*
 import com.solux.dorandoran.domain.entity.*
@@ -23,29 +24,66 @@ import com.solux.dorandoran.domain.entity.*
  */
 
 @Composable
-fun RecommendedBooksSection(
+fun BookRecommendationSection(
     books: List<BookEntity>,
-    onBookClick: (Long) -> Unit,
+    onBookClick: (BookEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
-        // 섹션 제목
-        SectionTitle(
-            mainText = "소설 부문 ",
-            highlightText = "추천 도서"
-        )
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // 제목을 Card 위에 배치
+        Box(
+            modifier = Modifier
+                .width(363.dp)
+                .padding(bottom = 8.dp)
+        ) {
+//            Text(
+//                text = "소설 부문 추천 도서",
+//                style = largeBold, // 24sp Bold
+//                modifier = Modifier.align(Alignment.CenterStart)
+//            )
+            SectionTitle(
+                mainText = "소설 부문 ",
+                highlightText = "추천 도서",
+                modifier = Modifier.align(Alignment.CenterStart)
+            )
+        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 책 리스트를 감싸는 테두리 박스
-        RecommendedBooksContainer {
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+        // Card 컨테이너
+        Card(
+            modifier = Modifier
+                .width(363.dp)
+                .height(230.dp)
+                .border(
+                    width = 2.dp,
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            Background03, // #DAEFE5
+                            Button02     // #8FDCA1
+                        )
+                    ),
+                    shape = RoundedCornerShape(15.dp)
+                ),
+            shape = RoundedCornerShape(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Background01 // #FFFFFF
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 4.dp
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 25.dp, vertical = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(25.dp)
             ) {
-                items(books) { book ->
+                books.take(3).forEach { book ->
                     BookRecommendationItem(
                         book = book,
-                        onClick = { onBookClick(book.id) }
+                        onClick = { onBookClick(book) }
                     )
                 }
             }

@@ -3,7 +3,6 @@ package com.solux.dorandoran.core_ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,15 +35,14 @@ fun BookRecommendationItem(
 ) {
     Column(
         modifier = modifier
-            .width(80.dp)
+            .width(88.dp)
             .clickable { onClick() },
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
-        // 책 이미지 (임시로 색상 박스)
         Box(
             modifier = Modifier
-                .size(80.dp, 100.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .size(88.dp, 127.dp)
+                .clip(RoundedCornerShape(10.dp))
                 .background(Background03)
         ) {
             Text(
@@ -62,7 +60,6 @@ fun BookRecommendationItem(
             style = smallBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
         )
 
         Text(
@@ -71,20 +68,16 @@ fun BookRecommendationItem(
             color = Neutral70,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
         )
 
-        // 별점 - drawable 리소스 사용
-        Row(
-            horizontalArrangement = Arrangement.Center
-        ) {
+        Row {
             repeat(5) { index ->
                 Image(
                     painter = painterResource(
                         id = if (index < book.rating) {
-                            R.drawable.ic_home_star_fill  // 채워진 별
+                            R.drawable.ic_home_star_fill
                         } else {
-                            R.drawable.ic_home_star       // 빈 별
+                            R.drawable.ic_home_star
                         }
                     ),
                     contentDescription = null,

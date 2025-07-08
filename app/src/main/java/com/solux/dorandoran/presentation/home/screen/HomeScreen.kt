@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.solux.dorandoran.core_ui.component.BookRecommendationSection
 import com.solux.dorandoran.core_ui.component.CustomSearchBar
 import com.solux.dorandoran.core_ui.component.EmotionShareSection
 import com.solux.dorandoran.core_ui.component.HotDiscussionsSection
 import com.solux.dorandoran.core_ui.component.RecentReviewsSection
-import com.solux.dorandoran.core_ui.component.RecommendedBooksSection
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.viewmodel.HomeViewModel
@@ -52,7 +52,7 @@ fun HomeScreen(
 
         // 소설 부문 추천 도서
         item {
-            RecommendedBooksSection(
+            BookRecommendationSection(
                 books = viewModel.recommendedBooks,
                 onBookClick = { bookId ->
                     // 책 상세 화면으로 이동
