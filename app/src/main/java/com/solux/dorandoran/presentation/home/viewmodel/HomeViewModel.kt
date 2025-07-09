@@ -45,6 +45,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             bookTitle = "소년이 온다",
             userName = "송이",
             userProfileImage = "",
+            imageURL = "",
             rating = 5.0f,
             content = "한강 작가님 최고",
             createdAt = "방금 전"

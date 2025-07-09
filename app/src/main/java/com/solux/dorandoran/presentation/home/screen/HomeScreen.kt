@@ -38,8 +38,10 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Background02),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-        contentPadding = PaddingValues(vertical = 16.dp)
+        verticalArrangement = Arrangement.spacedBy(22.dp),
+        // 소설 부문 추천 도서와 최근 리뷰 사이가 25.dp
+        // 그냥 모든 섹션 사이는 22.dp
+        contentPadding = PaddingValues(vertical = 22.dp)
     ) {
         // 검색창
         item {
@@ -66,10 +68,10 @@ fun HomeScreen(
             RecentReviewsSection(
                 reviews = viewModel.recentReviews,
                 onReviewClick = { reviewId ->
-                    // 리뷰 상세 화면으로 이동
+                    // <책 리뷰>으로 이동
                 },
                 onMoreClick = {
-                    // 리뷰 전체 화면으로 이동
+                    // <최근 리뷰>으로 이동
                 }
             )
         }
@@ -79,10 +81,10 @@ fun HomeScreen(
             HotDiscussionsSection(
                 discussions = viewModel.hotDiscussions,
                 onDiscussionClick = { discussionId ->
-                    // 토론 상세 화면으로 이동
+                    // <토론 화면>으로 이동
                 },
                 onMoreClick = {
-                    // 토론 전체 화면으로 이동
+                    // <토론>으로 이동
                 }
             )
         }
@@ -93,6 +95,7 @@ fun HomeScreen(
                 emotionShares = viewModel.emotionShares,
                 onEmotionClick = { emotionId ->
                     // 감성 공유 상세 화면으로 이동
+                    // 감성 공유 상세 화면이 없다...
                 },
                 onMoreClick = {
                     // 감성 공유 전체 화면으로 이동
@@ -102,7 +105,8 @@ fun HomeScreen(
 
         // 하단 여백
         item {
-            Spacer(modifier = Modifier.height(80.dp)) // 하단바 공간 확보
+            Spacer(modifier = Modifier.height(40.dp)) // 하단바 공간 확보
+            // 임의로 변경. 80.dp는 너무 크다
         }
     }
 }

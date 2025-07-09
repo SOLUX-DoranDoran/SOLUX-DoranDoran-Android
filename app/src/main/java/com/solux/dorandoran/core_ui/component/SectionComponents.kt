@@ -37,13 +37,8 @@ fun BookRecommendationSection(
         Box(
             modifier = Modifier
                 .width(363.dp)
-                .padding(bottom = 8.dp)
+                .padding(bottom = 10.dp)
         ) {
-//            Text(
-//                text = "소설 부문 추천 도서",
-//                style = largeBold, // 24sp Bold
-//                modifier = Modifier.align(Alignment.CenterStart)
-//            )
             SectionTitle(
                 mainText = "소설 부문 ",
                 highlightText = "추천 도서",
@@ -99,15 +94,17 @@ fun RecentReviewsSection(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.padding(horizontal = 16.dp)) {
-        // 섹션 제목 + 더보기 버튼
-        SectionHeader(
-            title = "최근 리뷰",
-            onMoreClick = onMoreClick
+        // 리뷰에 색 입힘
+        SectionTitle(
+            mainText = "최근 ",
+            highlightText = "리뷰"
+            //modifier = Modifier.ali
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         // 리뷰 리스트 (세로 스크롤, 높이 제한)
+            // 스크롤 필요 없음.
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.height(200.dp)
@@ -187,6 +184,7 @@ fun EmotionShareSection(
 
 @Composable
 private fun SectionTitle(
+    // 소설 부문 추천 도서랑 나머지는 크기가 다르단다...
     mainText: String,
     highlightText: String,
     modifier: Modifier = Modifier

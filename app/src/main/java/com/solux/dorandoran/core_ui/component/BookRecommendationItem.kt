@@ -70,6 +70,9 @@ fun BookRecommendationItem(
             overflow = TextOverflow.Ellipsis,
         )
 
+        // 별점과 작가 사이 간격 확보
+        Spacer(modifier = Modifier.height(12.dp))
+
         Row {
             repeat(5) { index ->
                 Image(
