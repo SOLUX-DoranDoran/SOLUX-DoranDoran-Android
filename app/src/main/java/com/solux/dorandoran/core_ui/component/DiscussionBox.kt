@@ -119,7 +119,7 @@ fun DiscussionBox(
                     Spacer(modifier = Modifier.width(4.dp))
 
                     Text(
-                        text = "김눈송",
+                        text = discussion.name,
                         style = smallRegular02,
                         color = Neutral70
                     )
@@ -136,10 +136,11 @@ fun DiscussCardPreview() {
         DiscussionBox(
             discussion = DiscussionPageEntity(
                 id = 1,
+                name = "김눈송",
                 bookTitle = "로미오와 줄리엣",
                 discussionTopic = "둘은 찐 사랑이 맞는가",
                 bookImageUrl = "",
-                authorName = "이눈송"
+                authorName = ""
             ),
             onClick = { },
             modifier = Modifier

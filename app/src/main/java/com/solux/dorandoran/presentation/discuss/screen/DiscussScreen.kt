@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.core_ui.component.DiscussionBox
 import com.solux.dorandoran.core_ui.theme.DoranDoranTheme
 import com.solux.dorandoran.domain.entity.DiscussionPageEntity
@@ -29,32 +30,20 @@ import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
+import com.solux.dorandoran.presentation.discuss.DiscussViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import androidx.compose.ui.tooling.preview.Preview as Preview
 
 
 @Composable
 fun DiscussRoute(
-    navigator: DiscussNavigator
+    navigator: DiscussNavigator,
+    viewModel: DiscussViewModel = hiltViewModel()
 ) {
 
-    val sampleDiscussions = listOf(
-        DiscussionPageEntity(
-            id = 1,
-            bookTitle = "로미오와 줄리엣",
-            discussionTopic = "둘은 찐 사랑이 맞는가",
-            bookImageUrl = "",
-            authorName = "이눈송"
-        ),
-        DiscussionPageEntity(
-            id = 2,
-            bookTitle = "해리포터",
-            discussionTopic = "덤블도어는 옳았는가",
-            bookImageUrl = "",
-            authorName = "김코딩"
-        )
-    )
+
     DiscussScreen(
-        discussionEx = sampleDiscussions,
+        discussionEx = viewModel.sampleDiscussions,
         onItemClick = {}
     )
 }
@@ -105,35 +94,4 @@ fun DiscussScreen(
         }
     }
 }
-
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DiscussScreenPreview() {
-
-        val discussionEx = listOf(
-            DiscussionPageEntity(
-                id = 1,
-                bookTitle = "로미오와 줄리엣",
-                discussionTopic = "둘은 찐 사랑이 맞는가",
-                bookImageUrl = "",
-                authorName = "이눈송"
-            ),
-            DiscussionPageEntity(
-                id = 2,
-                bookTitle = "해리포터",
-                discussionTopic = "덤블도어는 옳았는가",
-                bookImageUrl = "",
-                authorName = "김코딩"
-            )
-        )
-
-
-        DoranDoranTheme {
-            DiscussScreen(
-                discussionEx = discussionEx,
-                onItemClick = {}
-            )
-        }
-    }
 
