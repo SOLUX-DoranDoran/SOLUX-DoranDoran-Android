@@ -3,9 +3,6 @@ package com.solux.dorandoran.core_ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -55,8 +52,8 @@ fun BookRecommendationSection(
                     width = 2.dp,
                     brush = Brush.horizontalGradient(
                         colors = listOf(
-                            Background03, // #DAEFE5
-                            Button02     // #8FDCA1
+                            Background03,
+                            Button02
                         )
                     ),
                     shape = RoundedCornerShape(15.dp)
@@ -88,91 +85,90 @@ fun BookRecommendationSection(
 
 @Composable
 fun RecentReviewsSection(
-    reviews: List<ReviewEntity>,
+    review: ReviewEntity?,
     onReviewClick: (Long) -> Unit,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
-        // 리뷰에 색 입힘
-        SectionTitle(
-            mainText = "최근 ",
-            highlightText = "리뷰"
-            //modifier = Modifier.ali
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // SectionHeader를 사용하여 제목과 더보기 버튼을 포함
+        SectionHeader(
+            title = "최근 리뷰",
+            onMoreClick = onMoreClick,
+            modifier = Modifier
+                .width(363.dp)
+                .padding(bottom = 12.dp)
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        // 리뷰 리스트 (세로 스크롤, 높이 제한)
-            // 스크롤 필요 없음.
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(200.dp)
-        ) {
-            items(reviews) { review ->
-                ReviewItem(
-                    review = review,
-                    onClick = { onReviewClick(review.id) }
-                )
-            }
+        // 하나의 리뷰 표시
+        review?.let {
+            ReviewItem(
+                review = it,
+                onClick = { onReviewClick(it.id) }
+            )
         }
     }
 }
 
 @Composable
 fun HotDiscussionsSection(
-    discussions: List<DiscussionEntity>,
+    discussion: DiscussionEntity?,
     onDiscussionClick: (Long) -> Unit,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // SectionHeader를 사용하여 제목과 더보기 버튼을 포함
         SectionHeader(
             title = "지금 핫한 토론",
-            onMoreClick = onMoreClick
+            onMoreClick = onMoreClick,
+            modifier = Modifier
+                .width(363.dp)
+                .padding(bottom = 12.dp)
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(150.dp)
-        ) {
-            items(discussions) { discussion ->
-                DiscussionItem(
-                    discussion = discussion,
-                    onClick = { onDiscussionClick(discussion.id) }
-                )
-            }
+        // 디자인에 맞는 크기와 스타일의 단일 토론 표시
+        discussion?.let {
+            DiscussionItem(
+                discussion = it,
+                onClick = { onDiscussionClick(it.id) }
+            )
         }
     }
 }
 
 @Composable
 fun EmotionShareSection(
-    emotionShares: List<EmotionShareEntity>,
+    emotionShare: EmotionShareEntity?,
     onEmotionClick: (Long) -> Unit,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // SectionHeader를 사용하여 제목과 더보기 버튼을 포함
         SectionHeader(
             title = "감성 공유",
-            onMoreClick = onMoreClick
+            onMoreClick = onMoreClick,
+            modifier = Modifier
+                .width(363.dp)
+                .padding(bottom = 12.dp)
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(120.dp)
-        ) {
-            items(emotionShares) { emotion ->
-                EmotionShareItem(
-                    emotion = emotion,
-                    onClick = { onEmotionClick(emotion.id) }
-                )
-            }
+        // 고정 크기로 하나의 감성 공유 표시
+        emotionShare?.let {
+            EmotionShareItem(
+                emotion = it,
+                onClick = { onEmotionClick(it.id) }
+            )
         }
     }
 }
@@ -184,7 +180,6 @@ fun EmotionShareSection(
 
 @Composable
 private fun SectionTitle(
-    // 소설 부문 추천 도서랑 나머지는 크기가 다르단다...
     mainText: String,
     highlightText: String,
     modifier: Modifier = Modifier
@@ -195,12 +190,14 @@ private fun SectionTitle(
     ) {
         Text(
             text = mainText,
-            style = largeBold,
+            // "소설 부문 추천 도서"만 다르게
+            style = if (mainText.contains("소설 부문")) largeBold else baseBold,
             color = Neutral60
         )
         Text(
             text = highlightText,
-            style = largeBold,
+            // "소설 부문 추천 도서"만 다르게
+            style = if (mainText.contains("소설 부문")) largeBold else baseBold,
             color = Button02
         )
     }
@@ -217,17 +214,64 @@ private fun SectionHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = largeBold,
-            color = Neutral60
-        )
+        // 제목을 SectionTitle 형태로 분리하여 하이라이트 효과 적용
+        when (title) {
+            "최근 리뷰" -> {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "최근 ",
+                        style = baseBold,
+                        color = Neutral60
+                    )
+                    Text(
+                        text = "리뷰",
+                        style = baseBold,
+                        color = Button02
+                    )
+                }
+            }
+            "지금 핫한 토론" -> {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "지금 핫한 ",
+                        style = baseBold,
+                        color = Neutral60
+                    )
+                    Text(
+                        text = "토론",
+                        style = baseBold,
+                        color = Button02
+                    )
+                }
+            }
+            "감성 공유" -> {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "감성 ",
+                        style = baseBold,
+                        color = Neutral60
+                    )
+                    Text(
+                        text = "공유",
+                        style = baseBold,
+                        color = Button02
+                    )
+                }
+            }
+            else -> {
+                Text(
+                    text = title,
+                    style = baseBold,
+                    color = Neutral60
+                )
+            }
+        }
 
         TextButton(onClick = onMoreClick) {
             Text(
                 text = "더보기",
                 style = baseRegular,
-                color = Neutral70
+                color = Neutral60
             )
         }
     }

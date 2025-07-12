@@ -39,15 +39,13 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Background02),
         verticalArrangement = Arrangement.spacedBy(22.dp),
-        // 소설 부문 추천 도서와 최근 리뷰 사이가 25.dp
-        // 그냥 모든 섹션 사이는 22.dp
         contentPadding = PaddingValues(vertical = 22.dp)
     ) {
         // 검색창
         item {
             CustomSearchBar(
                 onSearchClick = {
-                    // 검색 화면으로 이동
+                    // 책 제목 검색할 수 있게 키보드 띄움
                 }
             )
         }
@@ -57,8 +55,7 @@ fun HomeScreen(
             BookRecommendationSection(
                 books = viewModel.recommendedBooks,
                 onBookClick = { bookId ->
-                    // 책 상세 화면으로 이동
-                    // navigator.
+                    // RecentReview.kt로 이동
                 }
             )
         }
@@ -66,12 +63,13 @@ fun HomeScreen(
         // 최근 리뷰
         item {
             RecentReviewsSection(
-                reviews = viewModel.recentReviews,
+                review = viewModel.recentReview,
+                // 하나의 리뷰만 쓰도록 함수명 변경
                 onReviewClick = { reviewId ->
-                    // <책 리뷰>으로 이동
+                    // ReveiwSreenTotal.kt로 이동
                 },
                 onMoreClick = {
-                    // <최근 리뷰>으로 이동
+                    // RecentReivew.kt로 이동
                 }
             )
         }
@@ -79,12 +77,12 @@ fun HomeScreen(
         // 지금 핫한 토론
         item {
             HotDiscussionsSection(
-                discussions = viewModel.hotDiscussions,
+                discussion = viewModel.hotDiscussions,
                 onDiscussionClick = { discussionId ->
-                    // <토론 화면>으로 이동
+                    // Discussing.kt로 이동
                 },
                 onMoreClick = {
-                    // <토론>으로 이동
+                    // DiscussScreen.kt로 이동
                 }
             )
         }
@@ -92,21 +90,20 @@ fun HomeScreen(
         // 감성 공유
         item {
             EmotionShareSection(
-                emotionShares = viewModel.emotionShares,
+                emotionShare = viewModel.emotionShares,
                 onEmotionClick = { emotionId ->
-                    // 감성 공유 상세 화면으로 이동
-                    // 감성 공유 상세 화면이 없다...
+                    // EmotionShare.kt로 이동
+                    // 아니면 어디?
                 },
                 onMoreClick = {
-                    // 감성 공유 전체 화면으로 이동
+                    // EmotionShare.kt로 이동
                 }
             )
         }
 
         // 하단 여백
         item {
-            Spacer(modifier = Modifier.height(40.dp)) // 하단바 공간 확보
-            // 임의로 변경. 80.dp는 너무 크다
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

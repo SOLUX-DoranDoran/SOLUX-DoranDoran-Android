@@ -5,11 +5,9 @@ data class DiscussionEntity(
     val title: String,
     val bookTitle: String,
     val author: String,
+    // 홈 화면에서 사용하지 않음
     val participantCount: Int,
-    val imageUrl: String
+    val imageUrl: String,
+    // 유저 프로필 이미지 추가
+    val userProfileImage: String
 )
-
-// partipantCount 삭세 필요
-// id와 author이 뭐가 다른지, 같다면 삭제
-// 프로필 이미지 url 필요
-// author은 그냥 안 쓰이네

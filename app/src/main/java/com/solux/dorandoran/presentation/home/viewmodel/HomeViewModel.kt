@@ -39,7 +39,8 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         )
     )
 
-    val recentReviews = listOf(
+    val recentReview =
+        // 하나의 더미 데이터만 쓰도록 listOf 함수 삭제
         ReviewEntity(
             id = 1,
             bookTitle = "소년이 온다",
@@ -49,21 +50,23 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             rating = 5.0f,
             content = "한강 작가님 최고",
             createdAt = "방금 전"
-        )
+
     )
 
-    val hotDiscussions = listOf(
+    val hotDiscussions =
+        // 하나의 더미 데이터만 쓰도록 listOf 함수 삭제
         DiscussionEntity(
             id = 1,
-            title = "돌은 짧 사랑이 맞는가",
+            title = "돌은 찐 사랑이 맞는가",
             bookTitle = "로미오와 줄리엣",
             author = "셰익스피어",
             participantCount = 17,
-            imageUrl = ""
-        )
+            imageUrl = "",
+            userProfileImage=""
     )
 
-    val emotionShares = listOf(
+    val emotionShares =
+        // 하나의 더미 데이터만 쓰도록 listOf 함수 삭제
         EmotionShareEntity(
             id = 1,
             bookTitle = "로미오와 줄리엣",
@@ -71,5 +74,4 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             userName = "송이",
             userProfileImage = ""
         )
-    )
 }
