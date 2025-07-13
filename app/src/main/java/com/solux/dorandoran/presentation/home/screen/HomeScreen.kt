@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -44,8 +43,9 @@ fun HomeScreen(
         // 검색창
         item {
             CustomSearchBar(
-                onSearchClick = {
+                onSearchClick = { searchQuery ->
                     // 책 제목 검색할 수 있게 키보드 띄움
+                    // viewModel.searchBooks(searchQuery)
                 }
             )
         }
@@ -56,6 +56,7 @@ fun HomeScreen(
                 books = viewModel.recommendedBooks,
                 onBookClick = { bookId ->
                     // RecentReview.kt로 이동
+                    navigator.navigateToRecentReview()
                 }
             )
         }
@@ -66,10 +67,10 @@ fun HomeScreen(
                 review = viewModel.recentReview,
                 // 하나의 리뷰만 쓰도록 함수명 변경
                 onReviewClick = { reviewId ->
-                    // ReveiwSreenTotal.kt로 이동
+                    navigator.navigateToReviewTotal()
                 },
                 onMoreClick = {
-                    // RecentReivew.kt로 이동
+                    navigator.navigateToRecentReview()
                 }
             )
         }
@@ -80,9 +81,10 @@ fun HomeScreen(
                 discussion = viewModel.hotDiscussions,
                 onDiscussionClick = { discussionId ->
                     // Discussing.kt로 이동
+                    navigator.navigateToDiscussing()
                 },
                 onMoreClick = {
-                    // DiscussScreen.kt로 이동
+                    navigator.navigateToDiscussScreen()
                 }
             )
         }
@@ -93,10 +95,11 @@ fun HomeScreen(
                 emotionShare = viewModel.emotionShares,
                 onEmotionClick = { emotionId ->
                     // EmotionShare.kt로 이동
-                    // 아니면 어디?
+                    navigator.navigateToEmotionShare()
                 },
                 onMoreClick = {
                     // EmotionShare.kt로 이동
+                    navigator.navigateToEmotionShare()
                 }
             )
         }

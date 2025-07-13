@@ -4,19 +4,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
 
-
 @Composable
-fun ReviewRoute(
+fun ReviewTotalRoute(
     navigator: ReviewNavigator
 ) {
-
-    ReviewScreen()
+    ReviewTotalScreen()
 }
 
 @Composable
-fun ReviewScreen() {
-    Text("리뷰 페이지입니다.")
-
+fun ReviewTotalScreen() {
+    Text("전체 리뷰 페이지입니다.")
 }
-
-

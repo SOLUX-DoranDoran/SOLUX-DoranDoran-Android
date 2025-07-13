@@ -31,14 +31,15 @@ import androidx.navigation.NavHostController
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.component.BottomNavigationItem
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
-import com.solux.dorandoran.presentation.discuss.screen.DiscussRoute
+import com.solux.dorandoran.presentation.discuss.screen.DiscussScreenRoute
+import com.solux.dorandoran.presentation.discuss.screen.DiscussScreenRoute
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.screen.HomeRoute
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
-import com.solux.dorandoran.presentation.review.screen.ReviewRoute
+import com.solux.dorandoran.presentation.review.screen.ReviewTotalRoute
 
 
 @Composable
@@ -120,11 +121,11 @@ fun MainScreen(
                     HomeRoute(navigator = HomeNavigator(navController = navController))
                 }
                 1 -> {
-                    DiscussRoute(navigator = DiscussNavigator(navController = navController))
+                    DiscussScreenRoute(navigator = DiscussNavigator(navController = navController))
 
                 }
                 2 -> {
-                    ReviewRoute(navigator = ReviewNavigator(navController = navController))
+                    ReviewTotalRoute(navigator = ReviewNavigator(navController = navController))
                 }
                 3 -> {
                     MypageRoute(navigator = MypageNavigator(navController = navController))

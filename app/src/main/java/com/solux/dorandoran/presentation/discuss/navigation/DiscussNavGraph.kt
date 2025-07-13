@@ -2,12 +2,18 @@ package com.solux.dorandoran.presentation.discuss.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.solux.dorandoran.presentation.discuss.screen.DiscussRoute
+import com.solux.dorandoran.presentation.discuss.screen.DiscussScreenRoute
+import com.solux.dorandoran.presentation.discuss.screen.DiscussScreenRoute
+import com.solux.dorandoran.presentation.discuss.screen.DiscussingRoute
 
 fun NavGraphBuilder.discussNavGraph(
     navigator: DiscussNavigator
 ) {
-    composable(route = "discuss") {
-        DiscussRoute(navigator = navigator)
+    composable(route = "discuss_screen") {
+        DiscussScreenRoute(navigator = navigator)
+    }
+
+    composable(route = "discussing") {
+        DiscussingRoute(navigator = navigator)
     }
 }

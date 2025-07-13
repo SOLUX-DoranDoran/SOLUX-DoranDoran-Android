@@ -13,16 +13,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Neutral70
@@ -34,8 +44,11 @@ import com.solux.dorandoran.core_ui.theme.Neutral60
 @Composable
 fun CustomSearchBar(
     modifier: Modifier = Modifier,
-    onSearchClick: () -> Unit
+    onSearchClick: (String) -> Unit = {}
 ) {
+    var searchText by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -43,34 +56,70 @@ fun CustomSearchBar(
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, Neutral60, RoundedCornerShape(24.dp))
-            .background(Background01)
-            .clickable { onSearchClick() },
+            .background(Background01),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
+            // 검색 아이콘 (검색 실행)
             Image(
-                painter = painterResource(id=R.drawable.ic_home_search),
+                painter = painterResource(id = R.drawable.ic_home_search),
                 contentDescription = "검색",
-                modifier= Modifier.size(24.dp)
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable {
+                        if (searchText.isNotBlank()) {
+                            onSearchClick(searchText)
+                            keyboardController?.hide()
+                        }
+                    }
             )
+
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "검색하기",
-                style = baseRegular,
-                color = Neutral60
+
+            // 실제 입력 필드
+            BasicTextField(
+                value = searchText,
+                onValueChange = { searchText = it },
+                modifier = Modifier.weight(1f),
+                textStyle = baseRegular.copy(color = Neutral60),
+                cursorBrush = SolidColor(Neutral60),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        if (searchText.isNotBlank()) {
+                            onSearchClick(searchText)
+                            keyboardController?.hide()
+                        }
+                    }
+                ),
+                decorationBox = { innerTextField ->
+                    if (searchText.isEmpty()) {
+                        Text(
+                            text = "검색하기",
+                            style = baseRegular,
+                            color = Neutral60
+                        )
+                    }
+                    innerTextField()
+                }
             )
         }
 
-        // X 버튼 (오른쪽)
-        Image(
-            painter = painterResource(id=R.drawable.ic_home_delete),
-            contentDescription = "닫기",
-            modifier = Modifier.align(Alignment.CenterEnd)
-                .padding(end=16.dp)
-                . size(24.dp)
-        )
+        // 삭제 버튼 (오른쪽) - 텍스트가 있을 때만 표시
+        if (searchText.isNotEmpty()) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_home_delete),
+                contentDescription = "지우기",
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 16.dp)
+                    .size(24.dp)
+                    .clickable { searchText = "" }
+            )
+        }
     }
 }
