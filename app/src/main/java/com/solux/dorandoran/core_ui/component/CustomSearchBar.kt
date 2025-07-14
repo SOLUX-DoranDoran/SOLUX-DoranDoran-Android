@@ -79,34 +79,35 @@ fun CustomSearchBar(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // 실제 입력 필드
-            BasicTextField(
-                value = searchText,
-                onValueChange = { searchText = it },
-                modifier = Modifier.weight(1f),
-                textStyle = baseRegular.copy(color = Neutral60),
-                cursorBrush = SolidColor(Neutral60),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        if (searchText.isNotBlank()) {
-                            onSearchClick(searchText)
-                            keyboardController?.hide()
+            // 실제 입력 필드 (한국어 입력 문제 해결)
+            Box(modifier = Modifier.weight(1f)) {
+                BasicTextField(
+                    value = searchText,
+                    onValueChange = { searchText = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = baseRegular.copy(color = Neutral60),
+                    cursorBrush = SolidColor(Neutral60),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            if (searchText.isNotBlank()) {
+                                onSearchClick(searchText)
+                                keyboardController?.hide()
+                            }
                         }
-                    }
-                ),
-                decorationBox = { innerTextField ->
-                    if (searchText.isEmpty()) {
-                        Text(
-                            text = "검색하기",
-                            style = baseRegular,
-                            color = Neutral60
-                        )
-                    }
-                    innerTextField()
+                    )
+                )
+
+                // Placeholder를 별도 Text로 분리
+                if (searchText.isEmpty()) {
+                    Text(
+                        text = "검색하기",
+                        style = baseRegular,
+                        color = Neutral60
+                    )
                 }
-            )
+            }
         }
 
         // 삭제 버튼 (오른쪽) - 텍스트가 있을 때만 표시
