@@ -4,7 +4,6 @@ package com.solux.dorandoran.core_ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,15 +30,9 @@ import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
-import com.solux.dorandoran.core_ui.theme.Neutral70
-import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.baseBold
-import com.solux.dorandoran.core_ui.theme.baseRegular
-import com.solux.dorandoran.core_ui.theme.smallBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.core_ui.theme.smallRegular02
 import com.solux.dorandoran.domain.entity.EmotionShareEntity
-import com.solux.dorandoran.core_ui.theme.largeBold
 
 @Composable
 fun EmotionShareItem(

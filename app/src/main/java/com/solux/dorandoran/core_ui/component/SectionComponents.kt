@@ -1,6 +1,5 @@
 package com.solux.dorandoran.core_ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,7 +7,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.core_ui.theme.*
@@ -274,21 +272,5 @@ private fun SectionHeader(
                 color = Neutral60
             )
         }
-    }
-}
-
-@Composable
-private fun RecommendedBooksContainer(
-    content: @Composable () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .border(2.dp, Button02, RoundedCornerShape(12.dp))
-            .background(Background01)
-            .padding(16.dp)
-    ) {
-        content()
     }
 }
