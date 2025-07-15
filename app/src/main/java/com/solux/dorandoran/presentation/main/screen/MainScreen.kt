@@ -24,21 +24,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.component.BottomNavigationItem
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
-import com.solux.dorandoran.presentation.discuss.screen.DiscussRoute
+import com.solux.dorandoran.presentation.discuss.screen.DiscussScreenRoute
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.screen.HomeRoute
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
-import com.solux.dorandoran.presentation.review.screen.ReviewRoute
+import com.solux.dorandoran.presentation.review.screen.ReviewTotalRoute
 
 
 @Composable
@@ -57,23 +56,23 @@ fun MainScreen(
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     val items = listOf(
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = painterResource(id = R.drawable.ic_homescreen_clicked),
+            unselectedIcon = painterResource(id = R.drawable.ic_homescreen),
             label = "홈"
         ),
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = painterResource(id = R.drawable.ic_discussscreen_clicked),
+            unselectedIcon = painterResource(id = R.drawable.ic_discussscreen),
             label = "토론"
         ),
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = painterResource(id = R.drawable.ic_reviewscreen_clicked),
+            unselectedIcon = painterResource(id = R.drawable.ic_reviewscreen),
             label = "리뷰"
         ),
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = painterResource(id = R.drawable.ic_mypagescreen_clicked),
+            unselectedIcon = painterResource(id = R.drawable.ic_mypagescreen),
             label = "마이페이지"
         ),
     )
@@ -89,7 +88,7 @@ fun MainScreen(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    imageVector = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
+                                    painter = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
                                     contentDescription = null,
                                     tint = Color.Unspecified,
                                     modifier = Modifier.size(24.dp)
@@ -99,7 +98,7 @@ fun MainScreen(
                                 Text(
                                     text = item.label,
 
-                                )
+                                    )
                             },
                             selected = selectedItem == index,
                             onClick = { selectedItem = index },
@@ -120,22 +119,22 @@ fun MainScreen(
                     HomeRoute(navigator = HomeNavigator(navController = navController))
                 }
                 1 -> {
-                    DiscussRoute(navigator = DiscussNavigator(navController = navController))
+                    DiscussScreenRoute(navigator = DiscussNavigator(navController = navController))
 
                 }
                 2 -> {
-                    ReviewRoute(navigator = ReviewNavigator(navController = navController))
+                    ReviewTotalRoute(navigator = ReviewNavigator(navController = navController))
                 }
                 3 -> {
                     MypageRoute(navigator = MypageNavigator(navController = navController))
                 }
-                }
+            }
         }
 
     }
 }
 
-// 눌러질때의 ripple 제거
+// 눌러질 때의 ripple 제거
 private object NoRippleTheme : RippleTheme {
     @Composable
     override fun defaultColor() = Color.Unspecified
