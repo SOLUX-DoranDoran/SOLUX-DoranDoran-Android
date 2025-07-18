@@ -32,7 +32,6 @@ import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
 import com.solux.dorandoran.presentation.discuss.DiscussViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import androidx.compose.ui.tooling.preview.Preview as Preview
 
 
 @Composable
@@ -40,32 +39,39 @@ fun DiscussRoute(
     navigator: DiscussNavigator,
     viewModel: DiscussViewModel = hiltViewModel()
 ) {
-
-
     DiscussScreen(
-        discussionEx = viewModel.sampleDiscussions,
-        onItemClick = {}
+        discussions = viewModel.sampleDiscussions,
+        onItemClick = { discussion ->
+            viewModel.selectDiscussion(discussion)
+            navigator.navigateToDiscussionRoom(discussion.id)
+            }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscussScreen(
-
-    discussionEx: List<DiscussionPageEntity>,
-    onItemClick: (DiscussionPageEntity) -> Unit
+    discussions: List<DiscussionPageEntity>,
+    onItemClick: (DiscussionPageEntity) -> Unit,
+    onSearchClick: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(
-                    text = "토론",
-                    style = baseBold,
-                    color = Neutral60
-                    ) },
+                title = {
+                    Text(
+                        text = "토론",
+                        style = baseBold,
+                        color = Neutral60
+                    )
+                },
                 actions = {
-                    IconButton(onClick = { /* TODO: 검색 기능 */ }) {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = "검색")
+                    IconButton(onClick = onSearchClick) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "검색",
+                            tint = Neutral60
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -73,25 +79,21 @@ fun DiscussScreen(
                 )
             )
         },
-        containerColor = Background03,
-        modifier = Modifier,
+        containerColor = Background03
     ) { innerPadding ->
-
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top=40.dp)
-
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(discussionEx) { discussion ->
+            items(discussions) { discussion ->
                 DiscussionBox(
                     discussion = discussion,
-                    onClick = { },
+                    onClick = { onItemClick(discussion) },
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(vertical = 10.dp)
                 )
             }
         }
     }
 }
-
