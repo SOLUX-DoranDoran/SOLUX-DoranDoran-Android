@@ -19,11 +19,11 @@ import com.solux.dorandoran.core_ui.theme.*
 fun EmotionShareNewRoute(
     navigator: MypageNavigator
 ) {
-    EmotionShareNew()
+    EmotionShareNew(navigator=navigator)
 }
 
 @Composable
-fun EmotionShareNew() {
+fun EmotionShareNew(navigator: MypageNavigator) {
     var bookTitle by remember { mutableStateOf("") }
     var quote by remember { mutableStateOf("") }
 
@@ -121,6 +121,7 @@ fun EmotionShareNew() {
         Button(
             onClick = {
                 // 등록 로직 구현
+                navigator.navigateToEmotionShare()
             },
             modifier = Modifier
                 .fillMaxWidth()
