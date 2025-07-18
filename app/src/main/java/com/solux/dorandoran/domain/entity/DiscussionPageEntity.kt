@@ -7,6 +7,9 @@ data class DiscussionPageEntity (
     val bookTitle: String,
     val discussionTopic: String,
     val bookImageUrl: String,
-    val authorName: String
+    val authorName: String,
+    val publisher: String,
+    val publishDate: String,
+    val discussionArgument: String
 
 )
