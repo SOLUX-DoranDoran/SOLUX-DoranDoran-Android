@@ -44,13 +44,12 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         ReviewEntity(
             id = 1,
             bookTitle = "소년이 온다",
-            userName = "송이",
-            userProfileImage = "",
-            imageURL = "",
-            rating = 5.0f,
+            coverImageUrl = "",
             content = "한강 작가님 최고",
-            createdAt = "방금 전"
-
+            rating = 3,
+            createdAt = "방금 전",
+            nickname = "송이",
+            profileImage = "",
     )
 
     val hotDiscussions =
@@ -72,6 +71,8 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             bookTitle = "로미오와 줄리엣",
             content = "이별은 아직엄 달콤한 슬픔이기에 내일이 될 때까지 안녕을 말하네",
             userName = "송이",
-            userProfileImage = ""
+            userProfileImage = "",
+            likeCount = 0,
+            createdAt = ""
         )
 }
