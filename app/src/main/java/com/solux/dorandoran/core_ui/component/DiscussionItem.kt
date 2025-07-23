@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -43,8 +47,9 @@ fun DiscussionItem(
 ) {
     Card(
         modifier = modifier
-            .width(363.dp)
-            .height(202.dp)
+            .widthIn(max = 363.dp) // 최대 너비 설정
+            .heightIn(max = 202.dp) // 최대 높이 설정
+            .fillMaxWidth() // 사용 가능한 최대 너비 사용
             .clickable { onClick() },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
@@ -61,11 +66,11 @@ fun DiscussionItem(
                 .padding(horizontal = 20.dp, vertical = 21.dp),
             verticalAlignment = Alignment.Top
         ) {
-            // 책 이미지
+            // 책 이미지 - 비율을 유지하면서 반응형으로 조정
             Box(
                 modifier = Modifier
-                    .width(110.dp)
-                    .height(155.dp)
+                    .weight(0.36f) // 전체 너비의 약 45% 사용
+                    .aspectRatio(0.71f) // 110:155 비율 유지 (110/155 ≈ 0.71)
                     .clip(RoundedCornerShape(10.dp))
                     .background(Background03)
             )
@@ -75,11 +80,11 @@ fun DiscussionItem(
             // 오른쪽 콘텐츠 영역
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(0.64f) // 전체 너비의 약 55% 사용
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                // 상단: 토론 제목
+                // 상단: 토론 제목 - 텍스트 영역을 동적으로 조정
                 Text(
                     text = discussion.title,
                     style = baseBold,
@@ -87,34 +92,28 @@ fun DiscussionItem(
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
-                        .width(187.dp)
-                        .height(76.dp)
+                        .fillMaxWidth() // 사용 가능한 전체 너비 사용
+                        .weight(1f) // 남은 공간을 유연하게 사용
                 )
 
                 // 하단 영역
                 Column {
                     // 책 제목
-                    Box(
-                        modifier = Modifier
-                            .width(94.dp)
-                            .height(17.dp),
-
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = discussion.bookTitle,
-                            style = smallRegular02,
-                            color = Neutral70,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                    Text(
+                        text = discussion.bookTitle,
+                        style = smallRegular02,
+                        color = Neutral70,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
                     Spacer(modifier = Modifier.height(14.dp))
 
                     // 작성자 정보
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         // 프로필 이미지
                         Box(
@@ -136,7 +135,7 @@ fun DiscussionItem(
                             text = "${discussion.author} 님",
                             style = smallRegular02,
                             color = Neutral70,
-                            modifier = Modifier.width(125.dp)
+                            modifier = Modifier.weight(1f) // 남은 공간을 모두 사용
                         )
                     }
                 }

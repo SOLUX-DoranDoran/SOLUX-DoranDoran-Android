@@ -1,5 +1,6 @@
 package com.solux.dorandoran.presentation.main.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -24,7 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.solux.dorandoran.R
@@ -56,23 +59,23 @@ fun MainScreen(
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     val items = listOf(
         BottomNavigationItem(
-            selectedIcon = painterResource(id = R.drawable.ic_homescreen_clicked),
-            unselectedIcon = painterResource(id = R.drawable.ic_homescreen),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_homescreen_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_homescreen),
             label = "홈"
         ),
         BottomNavigationItem(
-            selectedIcon = painterResource(id = R.drawable.ic_discussscreen_clicked),
-            unselectedIcon = painterResource(id = R.drawable.ic_discussscreen),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discusssreen_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discusssreen),
             label = "토론"
         ),
         BottomNavigationItem(
-            selectedIcon = painterResource(id = R.drawable.ic_reviewscreen_clicked),
-            unselectedIcon = painterResource(id = R.drawable.ic_reviewscreen),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_reviewscreen_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_reviewscreen),
             label = "리뷰"
         ),
         BottomNavigationItem(
-            selectedIcon = painterResource(id = R.drawable.ic_mypagescreen_clicked),
-            unselectedIcon = painterResource(id = R.drawable.ic_mypagescreen),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_mypagescreen_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_mypagescreen),
             label = "마이페이지"
         ),
     )
@@ -88,7 +91,8 @@ fun MainScreen(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    painter = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
+                                    // painter = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
+                                    imageVector = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
                                     contentDescription = null,
                                     tint = Color.Unspecified,
                                     modifier = Modifier.size(24.dp)

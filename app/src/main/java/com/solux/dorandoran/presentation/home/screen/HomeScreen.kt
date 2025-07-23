@@ -25,7 +25,7 @@ import com.solux.dorandoran.presentation.home.viewmodel.HomeViewModel
 fun HomeRoute(
     navigator: HomeNavigator
 ) {
-    HomeScreen(navigator=navigator)
+    HomeScreen(navigator = navigator)
 }
 
 @Composable

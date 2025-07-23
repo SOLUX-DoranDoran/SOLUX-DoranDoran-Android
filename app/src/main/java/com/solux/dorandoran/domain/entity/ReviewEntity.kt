@@ -1,15 +1,13 @@
 package com.solux.dorandoran.domain.entity
 
 data class ReviewEntity(
+    // 백엔드 필드명에 맞게 수정
     val id: Long,
     val bookTitle: String,
-    val userName: String,
-    val userProfileImage: String,
-    // 책 표지 이미지 포함
-    val imageURL : String,
-    val rating: Float,
+    val coverImageUrl : String,
     val content: String,
-    val createdAt: String
+    val rating: Int,
+    val createdAt: String,
+    val nickname: String,
+    val profileImage: String
 )
-
-// 다른 페이지까지 고려를 해서 entity 를 짜야 하는 건가?

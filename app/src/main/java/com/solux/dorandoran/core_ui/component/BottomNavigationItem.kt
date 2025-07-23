@@ -1,9 +1,9 @@
 package com.solux.dorandoran.core_ui.component
 
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomNavigationItem(
-    val selectedIcon: Painter,
-    val unselectedIcon: Painter,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
     val label: String,
 )

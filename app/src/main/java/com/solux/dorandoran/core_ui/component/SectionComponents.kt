@@ -1,22 +1,35 @@
 package com.solux.dorandoran.core_ui.component
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import com.solux.dorandoran.core_ui.theme.*
-import com.solux.dorandoran.domain.entity.*
-
-/**
- * 섹션 컴포넌트들
- * - 각 섹션의 제목, 레이아웃, 더보기 버튼 등을 관리
- * - 개별 아이템 컴포넌트들을 조합하여 완성된 섹션을 구성
- */
+import com.solux.dorandoran.core_ui.theme.Background01
+import com.solux.dorandoran.core_ui.theme.Background03
+import com.solux.dorandoran.core_ui.theme.Button02
+import com.solux.dorandoran.core_ui.theme.Neutral60
+import com.solux.dorandoran.core_ui.theme.baseBold
+import com.solux.dorandoran.core_ui.theme.baseRegular
+import com.solux.dorandoran.core_ui.theme.largeBold
+import com.solux.dorandoran.domain.entity.BookEntity
+import com.solux.dorandoran.domain.entity.DiscussionEntity
+import com.solux.dorandoran.domain.entity.EmotionShareEntity
+import com.solux.dorandoran.domain.entity.ReviewEntity
 
 @Composable
 fun BookRecommendationSection(
@@ -170,11 +183,6 @@ fun EmotionShareSection(
         }
     }
 }
-
-/**
- * 공통 UI 컴포넌트들
- * - 섹션에서 반복적으로 사용되는 UI 요소들
- */
 
 @Composable
 private fun SectionTitle(

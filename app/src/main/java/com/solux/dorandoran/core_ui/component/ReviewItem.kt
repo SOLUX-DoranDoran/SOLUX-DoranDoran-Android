@@ -120,7 +120,7 @@ fun ReviewItem(
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = review.userName,
+                        text = review.nickname,
                         style = smallRegular,
                         color = Neutral70
                     )

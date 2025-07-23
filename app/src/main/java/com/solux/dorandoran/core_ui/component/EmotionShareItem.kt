@@ -56,12 +56,7 @@ fun EmotionShareItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    start = 25.dp,
-                    top = 25.dp,
-                    end = 25.dp,
-                    bottom = 25.dp // 하단 패딩도 조금 증가
-                )
+                .padding(25.dp)
         ) {
             Text(
                 text = emotion.bookTitle,
