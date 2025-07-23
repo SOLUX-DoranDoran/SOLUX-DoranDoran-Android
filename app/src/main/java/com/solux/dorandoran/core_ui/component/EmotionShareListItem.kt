@@ -1,19 +1,20 @@
 package com.solux.dorandoran.core_ui.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solux.dorandoran.R
@@ -24,11 +25,10 @@ import com.solux.dorandoran.domain.entity.EmotionShareEntity
 fun EmotionShareListItem(
     emotion: EmotionShareEntity,
     itemIndex: Int,
-    onItemClick: () -> Unit,
     onLikeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // 홀수 번째는 왼쪽 꼬리, 짝수 번째는 오른쪽 꼬리 (반대로 변경)
+    // 홀수 번째는 왼쪽 꼬리, 짝수 번째는 오른쪽 꼬리
     val isOddPosition = (itemIndex % 2 != 0) // 0-based index에서 1, 3, 5...가 true (오른쪽 꼬리)
 
     BubbleCard(
@@ -36,10 +36,9 @@ fun EmotionShareListItem(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(
-                horizontal = 16.dp, // 좌우 동일 패딩으로 중앙 정렬
+                horizontal = 16.dp,
                 vertical = 8.dp
-            )
-            .clickable { onItemClick() },
+            ),
         isOddPosition = isOddPosition
     ) {
         Column(
@@ -114,16 +113,16 @@ fun EmotionShareListItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.clickable { onLikeClick() }
                 ) {
-                    Image(
-                        painter = painterResource(
+                    Icon(
+                        imageVector = ImageVector.vectorResource(
                             id = if (emotion.isLiked) {
-                                R.drawable.ic_emotionsharescreen_heart_fill // 사용자가 좋아요 했으면 채워진 하트
+                                R.drawable.ic_emotionsharescreen_heart_fill
                             } else {
-                                R.drawable.ic_emotionsharesreen_heart // 사용자가 좋아요 안했으면 빈 하트
-                            }
-                        ),
+                                R.drawable.ic_emotionsharesreen_heart
+                            }),
                         contentDescription = "좋아요",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
+                        tint = Color.Unspecified // 원본 색상 유지
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))

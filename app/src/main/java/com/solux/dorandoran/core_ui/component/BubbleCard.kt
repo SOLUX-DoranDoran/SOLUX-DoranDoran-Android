@@ -29,8 +29,8 @@ fun BubbleCard(
                 )
             }
             .padding(
-                start = 6.dp, // 왼쪽 꼬리일 때 패딩 추가
-                end = 6.dp,   // 오른쪽 꼬리일 때 패딩 추가
+                start = if (isOddPosition) 6.dp else 6.dp, // 왼쪽 패딩은 동일
+                end = if (isOddPosition) 2.dp else 6.dp,   // 홀수(오른쪽 꼬리)일 때 오른쪽 여백 축소
                 bottom = 12.dp
             )
     ) {
@@ -46,7 +46,7 @@ private fun DrawScope.drawBubbleShape(
     val cornerRadius = 15.dp.toPx()
     val tailWidth = 12.dp.toPx()
     val tailHeight = 8.dp.toPx()
-    val tailOffset = 20.dp.toPx() // 모서리에서 꼬리까지의 거리
+    val tailOffset = 340.dp.toPx()
 
     // 그림자를 위한 Paint 설정
     val shadowPaint = Paint().apply {
@@ -86,14 +86,11 @@ private fun createBubblePath(
 ): Path {
     val path = Path()
 
-    // 메인 말풍선 영역 (꼬리 공간 제외)
     val bubbleHeight = size.height - tailHeight
 
     if (isRightTail) {
-        // 오른쪽 꼬리가 있는 경우
         val bubbleWidth = size.width - tailWidth
 
-        // 메인 버블 (둥근 사각형)
         path.addRoundRect(
             RoundRect(
                 rect = Rect(0f, 0f, bubbleWidth, bubbleHeight),
@@ -101,19 +98,16 @@ private fun createBubblePath(
             )
         )
 
-        // 오른쪽 꼬리 - 둥근 모양
         val tailStartX = bubbleWidth - tailOffset
         val tailStartY = bubbleHeight
 
-        // 꼬리의 시작점에서 둥근 곡선으로 꼬리 그리기
         path.moveTo(tailStartX, tailStartY)
 
-        // 베지어 곡선을 사용하여 둥근 꼬리 생성
-        val controlPoint1X = tailStartX + tailWidth * 0.3f
+        val controlPoint1X = tailStartX + tailWidth * 0.5f
         val controlPoint1Y = tailStartY + tailHeight * 0.3f
-        val controlPoint2X = tailStartX + tailWidth * 0.7f
+        val controlPoint2X = tailStartX + tailWidth * 0.9f
         val controlPoint2Y = tailStartY + tailHeight * 0.7f
-        val endPointX = tailStartX + tailWidth * 0.5f
+        val endPointX = tailStartX + tailWidth * 0.7f
         val endPointY = tailStartY + tailHeight
 
         path.cubicTo(
@@ -122,26 +116,23 @@ private fun createBubblePath(
             endPointX, endPointY
         )
 
-        // 돌아오는 곡선
-        val backControlPoint1X = tailStartX + tailWidth * 0.2f
-        val backControlPoint1Y = tailStartY + tailHeight * 0.8f
-        val backControlPoint2X = tailStartX - tailWidth * 0.1f
-        val backControlPoint2Y = tailStartY + tailHeight * 0.4f
+        val backControlPoint1X = tailStartX + tailWidth * 0.4f
+        val backControlPoint1Y = tailStartY + tailHeight * 0.6f
+        val backControlPoint2X = tailStartX + tailWidth * 0.1f
+        val backControlPoint2Y = tailStartY + tailHeight * 0.2f
 
         path.cubicTo(
             backControlPoint1X, backControlPoint1Y,
             backControlPoint2X, backControlPoint2Y,
-            tailStartX - tailWidth * 0.3f, tailStartY
+            tailStartX + tailWidth * 0.1f, tailStartY
         )
 
         path.close()
 
     } else {
-        // 왼쪽 꼬리가 있는 경우
         val bubbleStartX = tailWidth
         val bubbleWidth = size.width - tailWidth
 
-        // 메인 버블 (둥근 사각형)
         path.addRoundRect(
             RoundRect(
                 rect = Rect(bubbleStartX, 0f, size.width, bubbleHeight),
@@ -149,18 +140,16 @@ private fun createBubblePath(
             )
         )
 
-        // 왼쪽 꼬리 - 둥근 모양
         val tailStartX = bubbleStartX + tailOffset
         val tailStartY = bubbleHeight
 
         path.moveTo(tailStartX, tailStartY)
 
-        // 베지어 곡선을 사용하여 둥근 꼬리 생성
-        val controlPoint1X = tailStartX - tailWidth * 0.3f
+        val controlPoint1X = tailStartX - tailWidth * 0.5f
         val controlPoint1Y = tailStartY + tailHeight * 0.3f
-        val controlPoint2X = tailStartX - tailWidth * 0.7f
+        val controlPoint2X = tailStartX - tailWidth * 0.9f
         val controlPoint2Y = tailStartY + tailHeight * 0.7f
-        val endPointX = tailStartX - tailWidth * 0.5f
+        val endPointX = tailStartX - tailWidth * 0.7f
         val endPointY = tailStartY + tailHeight
 
         path.cubicTo(
@@ -169,16 +158,15 @@ private fun createBubblePath(
             endPointX, endPointY
         )
 
-        // 돌아오는 곡선
-        val backControlPoint1X = tailStartX - tailWidth * 0.2f
-        val backControlPoint1Y = tailStartY + tailHeight * 0.8f
-        val backControlPoint2X = tailStartX + tailWidth * 0.1f
-        val backControlPoint2Y = tailStartY + tailHeight * 0.4f
+        val backControlPoint1X = tailStartX - tailWidth * 0.4f
+        val backControlPoint1Y = tailStartY + tailHeight * 0.6f
+        val backControlPoint2X = tailStartX - tailWidth * 0.1f
+        val backControlPoint2Y = tailStartY + tailHeight * 0.2f
 
         path.cubicTo(
             backControlPoint1X, backControlPoint1Y,
             backControlPoint2X, backControlPoint2Y,
-            tailStartX + tailWidth * 0.3f, tailStartY
+            tailStartX - tailWidth * 0.1f, tailStartY
         )
 
         path.close()

@@ -1,6 +1,5 @@
 package com.solux.dorandoran.presentation.mypage.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,7 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,10 +60,10 @@ fun EmotionShare(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 뒤로가기 버튼
-                Image(
-                    painter = painterResource(id = R.drawable.ic_back), // 뒤로가기 아이콘 필요
-                    contentDescription = "뒤로가기",
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
+                    contentDescription = "뒤로 가기",
                     modifier = Modifier
                         .size(24.dp)
                         .clickable { navigator.navController.popBackStack() }
@@ -77,13 +77,11 @@ fun EmotionShare(
                     textAlign = TextAlign.Center
                 )
 
-                // 검색 버튼
-                Image(
-                    painter = painterResource(id = R.drawable.ic_search), // 검색 아이콘 필요
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_search),
                     contentDescription = "검색",
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { /* 검색 기능 구현 */ }
                 )
             }
 
@@ -93,17 +91,13 @@ fun EmotionShare(
                     .fillMaxSize()
                     .padding(top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp), // 아이템 간 간격 줄임
-                contentPadding = PaddingValues(bottom = 100.dp) // FAB를 위한 하단 패딩
+                contentPadding = PaddingValues(bottom = 100.dp)
             ) {
                 itemsIndexed(viewModel.emotionShareList) { index, emotion ->
                     EmotionShareListItem(
                         emotion = emotion,
                         itemIndex = index,
-                        onItemClick = {
-                            // 상세 페이지로 이동 로직
-                        },
                         onLikeClick = {
-                            // 좋아요 토글 로직
                             viewModel.toggleLike(emotion.id)
                         }
                     )
