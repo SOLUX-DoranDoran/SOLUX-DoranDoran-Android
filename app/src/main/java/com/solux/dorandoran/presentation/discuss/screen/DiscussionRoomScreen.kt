@@ -7,48 +7,34 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.core_ui.component.DiscussionBookBox
+import com.solux.dorandoran.core_ui.component.DiscussionCommentBox
 import com.solux.dorandoran.core_ui.component.DiscussionRoomBox
-import com.solux.dorandoran.core_ui.component.DiscussionBox
 import com.solux.dorandoran.core_ui.theme.Background02
-import com.solux.dorandoran.core_ui.theme.DoranDoranTheme
 import com.solux.dorandoran.domain.entity.DiscussionPageEntity
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
-import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.largeBold
-import com.solux.dorandoran.core_ui.theme.smallRegular
+import com.solux.dorandoran.domain.entity.DiscussionArgument
 import com.solux.dorandoran.presentation.discuss.DiscussViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import androidx.compose.ui.tooling.preview.Preview as Preview
-
 
 
 @Composable
@@ -67,9 +53,9 @@ fun DiscussionRoomRoute(
         DiscussionRoomScreen(
             selectedBook = selectedDiscussion,
             discussionsForBook = bookDiscussions,
-            onBackClick={navigator.navigateUp()},
-            onAddClick={},
-            onDiscussionClick={ clickedDiscussionId ->
+            onBackClick = { navigator.navigateUp() },
+            onAddClick = {},
+            onDiscussionClick = { clickedDiscussionId ->
                 navigator.navigateToDiscussionRoom(clickedDiscussionId)
             }
         )
@@ -154,12 +140,13 @@ fun DiscussionRoomScreen(
                 )
             }
 
-            items(discussionsForBook) { discussion ->
+            items(discussionsForBook) { discussion: DiscussionPageEntity ->
                 DiscussionRoomBox(
                     discussion = discussion,
                     onClick = { onDiscussionClick(discussion.id) },
                     modifier = Modifier
-                        .padding(15.dp)
+                        .padding(15.dp),
+                    argument = discussion.arguments.firstOrNull()
                 )
             }
 

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.core_ui.component.DiscussionBox
+import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.DoranDoranTheme
 import com.solux.dorandoran.domain.entity.DiscussionPageEntity
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
@@ -40,7 +41,7 @@ fun DiscussRoute(
     viewModel: DiscussViewModel = hiltViewModel()
 ) {
     DiscussScreen(
-        discussions = viewModel.sampleDiscussions,
+        discussions = viewModel.sampleDiscussions.value,
         onItemClick = { discussion ->
             viewModel.selectDiscussion(discussion)
             navigator.navigateToDiscussionRoom(discussion.id)
@@ -75,7 +76,7 @@ fun DiscussScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Background03
+                    containerColor = Background02
                 )
             )
         },

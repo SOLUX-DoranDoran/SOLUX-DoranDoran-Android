@@ -40,6 +40,7 @@ import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.smallBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
 import com.solux.dorandoran.core_ui.theme.smallRegular02
+import com.solux.dorandoran.domain.entity.DiscussionArgument
 import com.solux.dorandoran.domain.entity.DiscussionPageEntity
 
 @Composable
@@ -120,6 +121,14 @@ fun DiscussionBox(
 @Composable
 fun DiscussBoxPreview() {
     DoranDoranTheme {
+
+        val sampleArgument = DiscussionArgument(
+            id = 1,
+            name = "김눈송",
+            content = "저는 이렇게 생각해요.",
+            timestamp = "2025-07-20"
+        )
+
         DiscussionBox(
             discussion = DiscussionPageEntity(
                 id = 1,
@@ -130,7 +139,7 @@ fun DiscussBoxPreview() {
                 authorName = "",
                 publisher = "",
                 publishDate = "",
-                discussionArgument = ""
+                arguments = listOf(sampleArgument)
             ),
             onClick = { },
             modifier = Modifier

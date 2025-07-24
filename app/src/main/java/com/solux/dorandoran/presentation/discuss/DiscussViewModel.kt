@@ -6,11 +6,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import com.solux.dorandoran.domain.entity.DiscussionArgument
 
 @HiltViewModel
 class DiscussViewModel @Inject constructor() : ViewModel() {
 
-    val sampleDiscussions = listOf(
+    val sampleDiscussions = mutableStateOf(listOf(
         DiscussionPageEntity(
             id = 1,
             name = "김눈송",
@@ -20,7 +21,14 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
             authorName = "셰익스피어",
             publisher = "민음사",
             publishDate = "2008년 2월 28일",
-            discussionArgument = "저게 사랑이 아니면 뭐란 말임"
+            arguments = listOf(
+                DiscussionArgument(
+                    id = 1,
+                    name = "김눈송",
+                    content = "저게 사랑이 아니면 뭐란 말임",
+                    timestamp = "2025-07-20"
+                )
+            )
         ),
         DiscussionPageEntity(
             id = 2,
@@ -31,7 +39,14 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
             authorName = "J.K. 롤링",
             publisher = "민음사",
             publishDate = "2008년 2월 28일",
-            discussionArgument = "사실 전 해리포터를 안읽었어요"
+            arguments = listOf(
+                DiscussionArgument(
+                    id = 2,
+                    name = "이눈송",
+                    content = "전 사실 해리포터를 안읽었어요",
+                    timestamp = "2025-07-20"
+                )
+            )
         ),
         DiscussionPageEntity(
             id = 3,
@@ -42,7 +57,14 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
             authorName = "조지 오웰",
             publisher = "민음사",
             publishDate = "2008년 2월 28일",
-            discussionArgument = "의견 ~~~"
+            arguments = listOf(
+                DiscussionArgument(
+                    id = 3,
+                    name = "박눈송",
+                    content = "의견 ~~~",
+                    timestamp = "2025-07-20"
+                )
+            )
         ),
         DiscussionPageEntity(
             id = 4,
@@ -53,7 +75,14 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
             authorName = "제인 오스틴",
             publisher = "민음사",
             publishDate = "2008년 2월 28일",
-            discussionArgument = "의견 ~~~"
+            arguments = listOf(
+                DiscussionArgument(
+                    id = 4,
+                    name = "최눈송",
+                    content = "의견 ~~~",
+                    timestamp = "2025-07-20"
+                )
+            )
         ),
         DiscussionPageEntity(
             id = 5,
@@ -64,9 +93,16 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
             authorName = "한강",
             publisher = "민음사",
             publishDate = "2008년 2월 28일",
-            discussionArgument = "의견 ~~~"
+            arguments = listOf(
+                DiscussionArgument(
+                    id = 5,
+                    name = "눈송이",
+                    content = "의견 ~~~",
+                    timestamp = "2025-07-20"
+                )
+            )
         )
-    )
+    ))
 
 
     private val _selectedDiscussion = mutableStateOf<DiscussionPageEntity?>(null)
@@ -77,17 +113,24 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
     }
 
     fun getDiscussionById(discussionId:Int):DiscussionPageEntity? {
-        return sampleDiscussions.find {it.id == discussionId}
+        return sampleDiscussions.value.find {it.id == discussionId}
     }
 
     fun getDiscussionsForBook(bookTitle:String): List<DiscussionPageEntity>{
-        return sampleDiscussions.filter {it.bookTitle == bookTitle}
+        return sampleDiscussions.value.filter {it.bookTitle == bookTitle}
     }
 
     fun getDiscussionsForSelectedBook(): List<DiscussionPageEntity> {
-        return sampleDiscussions.filter { it.bookTitle == selectedDiscussion.value?.bookTitle }
+        return sampleDiscussions.value.filter { it.bookTitle == selectedDiscussion.value?.bookTitle }
     }
 
-
+    fun addArgument(discussionId: Int, argument: DiscussionArgument) {
+        val updatedList = sampleDiscussions.value.map { discussion ->
+            if (discussion.id == discussionId) {
+                discussion.copy(arguments = discussion.arguments + argument)
+            } else discussion
+        }
+        sampleDiscussions.value = updatedList
+    }
 
 }

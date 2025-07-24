@@ -34,6 +34,7 @@ import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.largeBold
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
+import com.solux.dorandoran.domain.entity.DiscussionArgument
 import com.solux.dorandoran.domain.entity.DiscussionPageEntity
 
 @Composable
@@ -55,7 +56,7 @@ fun DiscussionBookBox(
         Row(
             modifier = Modifier
                 .padding(20.dp)
-                .padding(vertical = 12.dp),
+                .padding(vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -116,6 +117,14 @@ fun DiscussionBookBox(
 @Composable
 fun DiscussBookPreview() {
     DoranDoranTheme {
+
+        val sampleArgument = DiscussionArgument(
+            id = 1,
+            name = "김눈송",
+            content = "저는 이렇게 생각해요.",
+            timestamp = "2025-07-20"
+        )
+
         DiscussionBookBox(
             discussion = DiscussionPageEntity(
                 id = 1,
@@ -126,7 +135,7 @@ fun DiscussBookPreview() {
                 authorName = "셰익스피어",
                 publisher = "민음사",
                 publishDate = "2008년 2월 28일",
-                discussionArgument = "저게 사랑이 아니면 뭐란말임"
+                arguments = listOf(sampleArgument)
             ),
             onClick = { },
             modifier = Modifier
