@@ -11,7 +11,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
 
-    // 더미 데이터
     val recommendedBooks = listOf(
         BookEntity(
             id = 1,
@@ -40,7 +39,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     )
 
     val recentReview =
-        // 하나의 더미 데이터만 쓰도록 listOf 함수 삭제
         ReviewEntity(
             id = 1,
             bookTitle = "소년이 온다",
@@ -53,7 +51,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     )
 
     val hotDiscussions =
-        // 하나의 더미 데이터만 쓰도록 listOf 함수 삭제
         DiscussionEntity(
             id = 1,
             title = "돌은 찐 사랑이 맞는가",
@@ -65,7 +62,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     )
 
     val emotionShares =
-        // 하나의 더미 데이터만 쓰도록 listOf 함수 삭제
         EmotionShareEntity(
             id = 1,
             bookTitle = "로미오와 줄리엣",

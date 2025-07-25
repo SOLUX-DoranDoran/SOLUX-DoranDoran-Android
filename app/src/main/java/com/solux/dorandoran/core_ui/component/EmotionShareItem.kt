@@ -1,10 +1,8 @@
 package com.solux.dorandoran.core_ui.component
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,7 +41,7 @@ fun EmotionShareItem(
     Card(
         modifier = modifier
             .width(363.dp)
-            .height(180.dp) // 159.61dp에서 180dp로 증가
+            .height(180.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(containerColor = Background01),
@@ -62,12 +60,12 @@ fun EmotionShareItem(
                 text = emotion.bookTitle,
                 style = baseBold,
                 color = Neutral60,
-                modifier = Modifier.width(187.dp).height(23.dp)
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
-            Spacer(modifier = Modifier.height(15.dp)) // 간격 약간 축소
+            Spacer(modifier = Modifier.height(15.dp))
 
-            // 인용문 스타일
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
@@ -75,9 +73,8 @@ fun EmotionShareItem(
                 Text(
                     text = "\"",
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 45.sp, // 크기 약간 축소
-                    color = Button02,
-                    modifier = Modifier.width(27.dp)
+                    fontSize = 45.sp,
+                    color = Button02
                 )
 
                 Spacer(modifier = Modifier.width(13.dp))
@@ -86,38 +83,43 @@ fun EmotionShareItem(
                     text = emotion.content,
                     style = smallRegular,
                     color = Neutral60,
-                    maxLines = 3, // 3줄로 제한
+                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.width(280.dp)
+                    modifier = Modifier.weight(1f)
                 )
             }
 
-            Spacer(modifier = Modifier.height(15.dp)) // 간격 증가
+            Spacer(modifier = Modifier.height(15.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // 프로필 이미지
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = Button02,
-                            shape = CircleShape
-                        )
-                        .background(Background03)
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape)
+                            .border(
+                                width = 1.dp,
+                                color = Button02,
+                                shape = CircleShape
+                            )
+                            .background(Background03)
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                // 사용자명
                 Text(
                     text = emotion.userName,
                     style = smallRegular,
-                    color = Neutral60
+                    color = Neutral60,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
             }
         }

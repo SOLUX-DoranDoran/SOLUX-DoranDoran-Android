@@ -47,9 +47,9 @@ fun DiscussionItem(
 ) {
     Card(
         modifier = modifier
-            .widthIn(max = 363.dp) // 최대 너비 설정
-            .heightIn(max = 202.dp) // 최대 높이 설정
-            .fillMaxWidth() // 사용 가능한 최대 너비 사용
+            .widthIn(max = 363.dp)
+            .heightIn(max = 202.dp)
+            .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
@@ -66,25 +66,22 @@ fun DiscussionItem(
                 .padding(horizontal = 20.dp, vertical = 21.dp),
             verticalAlignment = Alignment.Top
         ) {
-            // 책 이미지 - 비율을 유지하면서 반응형으로 조정
             Box(
                 modifier = Modifier
-                    .weight(0.36f) // 전체 너비의 약 45% 사용
-                    .aspectRatio(0.71f) // 110:155 비율 유지 (110/155 ≈ 0.71)
+                    .weight(0.36f)
+                    .aspectRatio(0.71f)
                     .clip(RoundedCornerShape(10.dp))
                     .background(Background03)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // 오른쪽 콘텐츠 영역
             Column(
                 modifier = Modifier
-                    .weight(0.64f) // 전체 너비의 약 55% 사용
+                    .weight(0.64f)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                // 상단: 토론 제목 - 텍스트 영역을 동적으로 조정
                 Text(
                     text = discussion.title,
                     style = baseBold,
@@ -92,13 +89,11 @@ fun DiscussionItem(
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
-                        .fillMaxWidth() // 사용 가능한 전체 너비 사용
-                        .weight(1f) // 남은 공간을 유연하게 사용
+                        .fillMaxWidth()
+                        .weight(1f)
                 )
 
-                // 하단 영역
                 Column {
-                    // 책 제목
                     Text(
                         text = discussion.bookTitle,
                         style = smallRegular02,
@@ -110,12 +105,10 @@ fun DiscussionItem(
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    // 작성자 정보
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        // 프로필 이미지
                         Box(
                             modifier = Modifier
                                 .size(36.dp)
@@ -130,12 +123,11 @@ fun DiscussionItem(
 
                         Spacer(modifier = Modifier.width(13.dp))
 
-                        // 작성자 이름
                         Text(
                             text = "${discussion.author} 님",
                             style = smallRegular02,
                             color = Neutral70,
-                            modifier = Modifier.weight(1f) // 남은 공간을 모두 사용
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }

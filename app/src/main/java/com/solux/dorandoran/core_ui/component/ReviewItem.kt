@@ -46,7 +46,6 @@ fun ReviewItem(
             .clickable { onClick() }
             .border(
                 width = 2.dp,
-                // 테두리 색 변경
                 color = Background01,
                 shape = RoundedCornerShape(15.dp)
             ),
@@ -57,7 +56,6 @@ fun ReviewItem(
         Row(
             modifier = Modifier.padding(16.dp)
         ) {
-            // 책 표지 (색상 상자로 대체)
             Box(
                 modifier = Modifier
                     .width(107.dp)
@@ -68,7 +66,6 @@ fun ReviewItem(
 
             Spacer(modifier = Modifier.width(18.dp))
 
-            // 리뷰 정보
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -86,9 +83,9 @@ fun ReviewItem(
                         Image(
                             painter = painterResource(
                                 id = if (index < review.rating) {
-                                    R.drawable.ic_home_star_fill  // 채워진 별
+                                    R.drawable.ic_home_star_fill
                                 } else {
-                                    R.drawable.ic_home_star       // 빈 별
+                                    R.drawable.ic_home_star
                                 }
                             ),
                             contentDescription = null,
@@ -109,7 +106,6 @@ fun ReviewItem(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // 프로필 이미지 (임시)
                     Box(
                         modifier = Modifier
                             .size(24.dp)

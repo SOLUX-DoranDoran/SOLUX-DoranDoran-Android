@@ -8,5 +8,3 @@ data class BookEntity(
     val rating: Float,
     val category: String
 )
-
-// category 필요 없을 듯 애초에 왜 넣은 거지;;;

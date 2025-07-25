@@ -3,7 +3,6 @@ package com.solux.dorandoran.core_ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,16 +38,17 @@ fun BookRecommendationItem(
             .clickable { onClick() },
         horizontalAlignment = Alignment.Start
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .size(88.dp, 127.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .background(Background03)
+                .background(Background03),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
         ) {
             Text(
                 text = book.title,
                 style = smallBold,
-                modifier = Modifier.align(Alignment.Center),
                 textAlign = TextAlign.Center
             )
         }
@@ -70,7 +70,6 @@ fun BookRecommendationItem(
             overflow = TextOverflow.Ellipsis,
         )
 
-        // 별점과 작가 사이 간격 확보
         Spacer(modifier = Modifier.height(12.dp))
 
         Row {

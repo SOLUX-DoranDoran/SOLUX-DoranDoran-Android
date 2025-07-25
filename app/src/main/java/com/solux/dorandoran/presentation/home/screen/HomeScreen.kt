@@ -40,32 +40,25 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(22.dp),
         contentPadding = PaddingValues(vertical = 22.dp)
     ) {
-        // 검색창
         item {
             CustomSearchBar(
                 onSearchClick = { searchQuery ->
-                    // 책 제목 검색할 수 있게 키보드 띄움
-                    // viewModel.searchBooks(searchQuery)
                 }
             )
         }
 
-        // 소설 부문 추천 도서
         item {
             BookRecommendationSection(
                 books = viewModel.recommendedBooks,
                 onBookClick = { bookId ->
-                    // RecentReview.kt로 이동
                     navigator.navigateToRecentReview()
                 }
             )
         }
 
-        // 최근 리뷰
         item {
             RecentReviewsSection(
                 review = viewModel.recentReview,
-                // 하나의 리뷰만 쓰도록 함수명 변경
                 onReviewClick = { reviewId ->
                     navigator.navigateToReviewTotal()
                 },
@@ -75,12 +68,10 @@ fun HomeScreen(
             )
         }
 
-        // 지금 핫한 토론
         item {
             HotDiscussionsSection(
                 discussion = viewModel.hotDiscussions,
                 onDiscussionClick = { discussionId ->
-                    // Discussing.kt로 이동
                     navigator.navigateToDiscussing()
                 },
                 onMoreClick = {
@@ -89,22 +80,18 @@ fun HomeScreen(
             )
         }
 
-        // 감성 공유
         item {
             EmotionShareSection(
                 emotionShare = viewModel.emotionShares,
                 onEmotionClick = { emotionId ->
-                    // EmotionShare.kt로 이동
                     navigator.navigateToEmotionShare()
                 },
                 onMoreClick = {
-                    // EmotionShare.kt로 이동
                     navigator.navigateToEmotionShare()
                 }
             )
         }
 
-        // 하단 여백
         item {
             Spacer(modifier = Modifier.height(40.dp))
         }

@@ -49,10 +49,8 @@ fun EmotionShare(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // 상태바 공간
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 상단 헤더
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,7 +67,6 @@ fun EmotionShare(
                         .clickable { navigator.navController.popBackStack() }
                 )
 
-                // 제목
                 Text(
                     text = "감성 공유",
                     style = baseBold,
@@ -85,12 +82,11 @@ fun EmotionShare(
                 )
             }
 
-            // 스크롤 가능한 리스트
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp), // 아이템 간 간격 줄임
+                verticalArrangement = Arrangement.spacedBy(4.dp),
                 contentPadding = PaddingValues(bottom = 100.dp)
             ) {
                 itemsIndexed(viewModel.emotionShareList) { index, emotion ->
@@ -105,7 +101,6 @@ fun EmotionShare(
             }
         }
 
-        // 플로팅 액션 버튼
         FloatingActionButton(
             onClick = { navigator.navigateToEmotionShareNew() },
             modifier = Modifier

@@ -89,7 +89,6 @@ fun MainScreen(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    // painter = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
                                     imageVector = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
                                     contentDescription = null,
                                     tint = Color.Unspecified,
@@ -136,7 +135,6 @@ fun MainScreen(
     }
 }
 
-// 눌러질 때의 ripple 제거
 private object NoRippleTheme : RippleTheme {
     @Composable
     override fun defaultColor() = Color.Unspecified

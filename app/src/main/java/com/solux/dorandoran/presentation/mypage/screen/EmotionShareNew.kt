@@ -34,10 +34,8 @@ fun EmotionShareNew(navigator: MypageNavigator) {
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Status Bar Spacer
         Spacer(modifier = Modifier.height(22.dp))
 
-        // Title
         Text(
             text = "감성 공유",
             style = baseBold,
@@ -47,7 +45,6 @@ fun EmotionShareNew(navigator: MypageNavigator) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // Book Title Section
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -79,7 +76,6 @@ fun EmotionShareNew(navigator: MypageNavigator) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Quote Section
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -94,7 +90,6 @@ fun EmotionShareNew(navigator: MypageNavigator) {
             OutlinedTextField(
                 value = quote,
                 onValueChange = { newValue ->
-                    // 엔터 개수로 줄 수 제한
                     val lineBreaks = newValue.count {it == '\n'}
 
                     if (lineBreaks < 13 && newValue.length <= 500) {
@@ -117,10 +112,8 @@ fun EmotionShareNew(navigator: MypageNavigator) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Register Button
         Button(
             onClick = {
-                // 등록 로직 구현
                 navigator.navigateToEmotionShare()
             },
             modifier = Modifier

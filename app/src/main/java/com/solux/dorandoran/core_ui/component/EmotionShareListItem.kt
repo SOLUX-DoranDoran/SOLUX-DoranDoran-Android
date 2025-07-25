@@ -28,8 +28,7 @@ fun EmotionShareListItem(
     onLikeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // 홀수 번째는 왼쪽 꼬리, 짝수 번째는 오른쪽 꼬리
-    val isOddPosition = (itemIndex % 2 != 0) // 0-based index에서 1, 3, 5...가 true (오른쪽 꼬리)
+    val isOddPosition = (itemIndex % 2 != 0)
 
     BubbleCard(
         modifier = modifier
@@ -46,7 +45,6 @@ fun EmotionShareListItem(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            // 책 제목
             Text(
                 text = emotion.bookTitle,
                 style = baseBold,
@@ -56,7 +54,6 @@ fun EmotionShareListItem(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // 인용문
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
@@ -81,13 +78,11 @@ fun EmotionShareListItem(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 하단 영역 (프로필 + 좋아요)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 프로필 영역
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -108,7 +103,6 @@ fun EmotionShareListItem(
                     )
                 }
 
-                // 좋아요 영역
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.clickable { onLikeClick() }
@@ -122,7 +116,7 @@ fun EmotionShareListItem(
                             }),
                         contentDescription = "좋아요",
                         modifier = Modifier.size(20.dp),
-                        tint = Color.Unspecified // 원본 색상 유지
+                        tint = Color.Unspecified
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))

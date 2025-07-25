@@ -41,7 +41,6 @@ fun BookRecommendationSection(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 제목을 Card 위에 배치
         Box(
             modifier = Modifier
                 .width(363.dp)
@@ -54,7 +53,6 @@ fun BookRecommendationSection(
             )
         }
 
-        // Card 컨테이너
         Card(
             modifier = Modifier
                 .width(363.dp)
@@ -71,7 +69,7 @@ fun BookRecommendationSection(
                 ),
             shape = RoundedCornerShape(15.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Background01 // #FFFFFF
+                containerColor = Background01
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 4.dp
@@ -105,7 +103,6 @@ fun RecentReviewsSection(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // SectionHeader를 사용하여 제목과 더보기 버튼을 포함
         SectionHeader(
             title = "최근 리뷰",
             onMoreClick = onMoreClick,
@@ -114,7 +111,6 @@ fun RecentReviewsSection(
                 .padding(bottom = 12.dp)
         )
 
-        // 하나의 리뷰 표시
         review?.let {
             ReviewItem(
                 review = it,
@@ -135,7 +131,6 @@ fun HotDiscussionsSection(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // SectionHeader를 사용하여 제목과 더보기 버튼을 포함
         SectionHeader(
             title = "지금 핫한 토론",
             onMoreClick = onMoreClick,
@@ -144,7 +139,6 @@ fun HotDiscussionsSection(
                 .padding(bottom = 12.dp)
         )
 
-        // 디자인에 맞는 크기와 스타일의 단일 토론 표시
         discussion?.let {
             DiscussionItem(
                 discussion = it,
@@ -165,7 +159,6 @@ fun EmotionShareSection(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // SectionHeader를 사용하여 제목과 더보기 버튼을 포함
         SectionHeader(
             title = "감성 공유",
             onMoreClick = onMoreClick,
@@ -174,7 +167,6 @@ fun EmotionShareSection(
                 .padding(bottom = 12.dp)
         )
 
-        // 고정 크기로 하나의 감성 공유 표시
         emotionShare?.let {
             EmotionShareItem(
                 emotion = it,
@@ -196,13 +188,11 @@ private fun SectionTitle(
     ) {
         Text(
             text = mainText,
-            // "소설 부문 추천 도서"만 다르게
             style = if (mainText.contains("소설 부문")) largeBold else baseBold,
             color = Neutral60
         )
         Text(
             text = highlightText,
-            // "소설 부문 추천 도서"만 다르게
             style = if (mainText.contains("소설 부문")) largeBold else baseBold,
             color = Button02
         )
@@ -220,7 +210,6 @@ private fun SectionHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 제목을 SectionTitle 형태로 분리하여 하이라이트 효과 적용
         when (title) {
             "최근 리뷰" -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {

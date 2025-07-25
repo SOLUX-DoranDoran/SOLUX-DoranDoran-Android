@@ -14,7 +14,7 @@ import com.solux.dorandoran.core_ui.theme.Background01
 @Composable
 fun BubbleCard(
     modifier: Modifier = Modifier,
-    isOddPosition: Boolean = true, // true면 오른쪽 꼬리, false면 왼쪽 꼬리
+    isOddPosition: Boolean = true,
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
@@ -29,8 +29,8 @@ fun BubbleCard(
                 )
             }
             .padding(
-                start = if (isOddPosition) 6.dp else 6.dp, // 왼쪽 패딩은 동일
-                end = if (isOddPosition) 2.dp else 6.dp,   // 홀수(오른쪽 꼬리)일 때 오른쪽 여백 축소
+                start = if (isOddPosition) 6.dp else 6.dp,
+                end = if (isOddPosition) 2.dp else 6.dp,
                 bottom = 12.dp
             )
     ) {
@@ -48,13 +48,11 @@ private fun DrawScope.drawBubbleShape(
     val tailHeight = 8.dp.toPx()
     val tailOffset = 340.dp.toPx()
 
-    // 그림자를 위한 Paint 설정
     val shadowPaint = Paint().apply {
         this.color = Color.Black.copy(alpha = 0.1f)
         isAntiAlias = true
     }
 
-    // 메인 카드를 위한 Paint 설정
     val cardPaint = Paint().apply {
         this.color = color
         isAntiAlias = true
@@ -63,15 +61,12 @@ private fun DrawScope.drawBubbleShape(
     drawIntoCanvas { canvas ->
         val shadowOffset = 2.dp.toPx()
 
-        // 메인 버블과 꼬리를 함께 그리기
         val path = createBubblePath(size, cornerRadius, tailWidth, tailHeight, tailOffset, isRightTail)
 
-        // 그림자 그리기
         val shadowPath = Path()
         shadowPath.addPath(path, Offset(0f, shadowOffset))
         canvas.drawPath(shadowPath, shadowPaint)
 
-        // 메인 카드 그리기
         canvas.drawPath(path, cardPaint)
     }
 }
