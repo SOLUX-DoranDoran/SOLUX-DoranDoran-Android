@@ -133,4 +133,14 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
         sampleDiscussions.value = updatedList
     }
 
+    private val _activeCommentInputMap = mutableStateOf<Map<Int, Boolean>>(emptyMap())
+    val activeCommentInputMap: State<Map<Int, Boolean>> = _activeCommentInputMap
+
+    fun toggleCommentInput(argumentId: Int) {
+        _activeCommentInputMap.value = _activeCommentInputMap.value.toMutableMap().apply {
+            this[argumentId] = !(this[argumentId] ?: false)
+        }
+    }
+
+
 }

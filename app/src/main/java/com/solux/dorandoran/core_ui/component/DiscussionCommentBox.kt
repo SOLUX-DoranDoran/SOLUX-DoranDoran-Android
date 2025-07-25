@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,7 +48,14 @@ import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.domain.entity.Comment
 import com.solux.dorandoran.domain.entity.DiscussionArgument
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
@@ -57,6 +65,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background03
@@ -159,6 +168,7 @@ fun DiscussionCommentBox(
     argument: DiscussionArgument,
     comments: List<Comment> = emptyList(),
     onAddComment: (Int) -> Unit,
+    isInputVisible: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -258,17 +268,42 @@ fun DiscussionCommentBox(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(top = 8.dp)
-                    .size(36.dp),
+                    .size(36.dp)
+                    .clip(CircleShape),
                 containerColor = Button02,
                 contentColor = Color.White
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_discussionscreen_chatbubble),
                     contentDescription = "댓글 추가",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(20.dp),
+                    tint = Background01
                 )
             }
         }
+    }
+
+    if (isInputVisible) {
+        var inputText by remember { mutableStateOf("") }
+        val focusRequester = remember { FocusRequester() }
+        val keyboardController = LocalSoftwareKeyboardController.current
+
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+            keyboardController?.show()
+        }
+
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = { inputText = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .focusRequester(focusRequester),
+            placeholder = { Text("댓글을 입력하세요...") },
+            singleLine = false,
+            maxLines = 5
+        )
     }
 }
 
