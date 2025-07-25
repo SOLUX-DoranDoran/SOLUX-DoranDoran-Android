@@ -16,7 +16,7 @@ val properties =
 
 android {
     namespace = "com.solux.dorandoran"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.solux.dorandoran"
