@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import com.solux.dorandoran.domain.entity.DiscussionArgument
 
 @HiltViewModel
@@ -142,5 +144,22 @@ class DiscussViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    var commentInputText by mutableStateOf("")
+        private set
+
+    fun updateCommentText(newText: String) {
+        commentInputText = newText
+    }
+
+    fun submitComment(argumentId: Int, commentText: String) {
+        if (commentInputText.isNotBlank()) {
+            // 실제 댓글 전송 로직 추가
+            println("댓글 전송: $commentInputText for argument $argumentId")
+
+            // 전송 후 입력 초기화
+            commentInputText = ""
+        }
+    }
+}
 
 }
