@@ -1,19 +1,37 @@
 package com.solux.dorandoran.presentation.mypage.screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.solux.dorandoran.core_ui.theme.*
+import com.solux.dorandoran.core_ui.theme.Background01
+import com.solux.dorandoran.core_ui.theme.Background02
+import com.solux.dorandoran.core_ui.theme.Button02
+import com.solux.dorandoran.core_ui.theme.Neutral60
+import com.solux.dorandoran.core_ui.theme.Neutral80
+import com.solux.dorandoran.core_ui.theme.baseBold
+import com.solux.dorandoran.core_ui.theme.baseRegular
+import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 
 @Composable
 fun EmotionShareNewRoute(
@@ -90,7 +108,7 @@ fun EmotionShareNew(navigator: MypageNavigator) {
             OutlinedTextField(
                 value = quote,
                 onValueChange = { newValue ->
-                    val lineBreaks = newValue.count {it == '\n'}
+                    val lineBreaks = newValue.count { it == '\n' }
 
                     if (lineBreaks < 13 && newValue.length <= 500) {
                         quote = newValue
