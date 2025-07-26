@@ -6,16 +6,13 @@ import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
 
 
 @Composable
-fun DiscussScreenRoute(
+fun DiscussingRoute(
     navigator: DiscussNavigator
 ) {
-    DiscussScreen()
+    Discussing()
 }
 
 @Composable
-fun DiscussScreen() {
-	Text("토론 화면입니다.")
-
- }
-
-
+fun Discussing() {
+    Text("토론방입니다.")
+}
