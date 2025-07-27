@@ -6,7 +6,7 @@ import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
 
 
 @Composable
-fun DiscussRoute(
+fun DiscussDetailRoute(
     navigator: DiscussNavigator
 ) {
     DiscussScreen()
