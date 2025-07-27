@@ -16,8 +16,8 @@ class HomeNavigator(
     }
 
     // 전체 토론 화면으로 이동
-    fun navigateToDiscussScreen() {
-        navController.navigate("discuss_screen")
+    fun navigateToDiscussDetail() {
+        navController.navigate("discuss_detail")
     }
 
     // 토론 중 화면으로 이동

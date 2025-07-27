@@ -31,7 +31,7 @@ import androidx.navigation.NavHostController
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.component.BottomNavigationItem
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
-import com.solux.dorandoran.presentation.discuss.screen.DiscussScreenRoute
+import com.solux.dorandoran.presentation.discuss.screen.DiscussDetailRoute
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.screen.HomeRoute
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator
@@ -62,8 +62,8 @@ fun MainScreen(
             label = "홈"
         ),
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discusssreen_clicked),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discusssreen),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discussdetail_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discussdetail),
             label = "토론"
         ),
         BottomNavigationItem(
@@ -120,7 +120,7 @@ fun MainScreen(
                     HomeRoute(navigator = HomeNavigator(navController = navController))
                 }
                 1 -> {
-                    DiscussScreenRoute(navigator = DiscussNavigator(navController = navController))
+                    DiscussDetailRoute(navigator = DiscussNavigator(navController = navController))
 
                 }
                 2 -> {

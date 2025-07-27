@@ -75,7 +75,7 @@ fun HomeScreen(
                     navigator.navigateToDiscussing()
                 },
                 onMoreClick = {
-                    navigator.navigateToDiscussScreen()
+                    navigator.navigateToDiscussDetail()
                 }
             )
         }
