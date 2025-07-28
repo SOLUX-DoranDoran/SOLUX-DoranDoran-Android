@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".DoranDoranApp"
         android:allowBackup="true"
@@ -13,17 +15,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DoranDoran"
         tools:targetApi="31">
+
         <activity
             android:name="com.solux.dorandoran.presentation.main.screen.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.DoranDoran">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-    </application>
 
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="dorandoran-scheme"
+                    android:host="oauth2"
+                    android:path="/callback" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
 </manifest>

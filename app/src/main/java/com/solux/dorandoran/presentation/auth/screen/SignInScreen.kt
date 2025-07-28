@@ -1,5 +1,7 @@
 package com.solux.dorandoran.presentation.auth.screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,19 +15,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Button02
-import com.solux.dorandoran.core_ui.theme.DoranDoranTheme
 import com.solux.dorandoran.core_ui.theme.largeBold
+import com.solux.dorandoran.presentation.auth.navigation.AuthNavigator
+
+@Composable
+fun SignInRoute(navigator: AuthNavigator) {
+    SignInScreen(navigator = navigator)
+}
 
 @Composable
 fun SignInScreen(
+    navigator: AuthNavigator,
     modifier: Modifier = Modifier
 ) {
+
+    val context = LocalContext.current
+    val naverLoginUrl =
+        "http://ec2-15-164-67-216.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/naver"
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -60,7 +73,8 @@ fun SignInScreen(
                 .fillMaxWidth()
                 .height(80.dp)
                 .clickable {
-                    // 네이버 로그인 로직
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(naverLoginUrl))
+                    context.startActivity(intent)
                 }
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -76,15 +90,6 @@ fun SignInScreen(
                 }
         )
 
-        Spacer(modifier = Modifier.height(150.dp)) // 하단 여백
-    }
-}
-
-
-@Preview
-@Composable
-private fun SinginScreenPreview() {
-    DoranDoranTheme {
-        SignInScreen()
+        Spacer(modifier = Modifier.height(150.dp))
     }
 }
