@@ -3,7 +3,6 @@ package com.solux.dorandoran.presentation.auth.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,61 +30,53 @@ fun SignInScreen(
         modifier = modifier
             .fillMaxSize()
             .background(Background02)
-            .padding(horizontal = 10.dp),
-        verticalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = 10.dp)
+            .padding(top = 180.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_logo),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .padding(bottom = 16.dp)
-            )
-
-            Text(
-                text = "도란도란",
-                style = largeBold,
-                color = Button02
-            )
-        }
-
-        Column(
+        Image(
+            painter = painterResource(id = R.drawable.ic_logo),
+            contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+                .height(120.dp)
+                .padding(bottom = 25.dp)
+        )
 
-            Image(
-                painter = painterResource(id = R.drawable.btn_naver),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .clickable {
-                        // 네이버 로그인 로직
-                    }
-            )
+        Text(
+            text = "도란도란",
+            style = largeBold,
+            color = Button02
+        )
 
-            Image(
-                painter = painterResource(id = R.drawable.btn_google),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .clickable {
-                        // 구글 로그인 로직
-                    }
-            )
-        }
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            painter = painterResource(id = R.drawable.btn_naver),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .clickable {
+                    // 네이버 로그인 로직
+                }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.btn_google),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .clickable {
+                    // 구글 로그인 로직
+                }
+        )
+
+        Spacer(modifier = Modifier.height(150.dp)) // 하단 여백
     }
 }
 
