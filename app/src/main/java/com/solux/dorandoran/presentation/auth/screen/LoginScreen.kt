@@ -69,7 +69,7 @@ fun SignInScreen(
                 contentDescription = "네이버로 시작하기",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(80.dp)
                     .clickable {
                         // 네이버 로그인 로직
                     }
