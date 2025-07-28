@@ -60,13 +60,13 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Image(
                 painter = painterResource(id = R.drawable.btn_naver),
-                contentDescription = "네이버로 시작하기",
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp)
