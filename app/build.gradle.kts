@@ -19,6 +19,10 @@ android {
     compileSdk = 35
 
     defaultConfig {
+        buildConfigField("String", "NAVER_LOGIN_URL", "\"${properties["NAVER_LOGIN_URL"]}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
+
+
         applicationId = "com.solux.dorandoran"
         minSdk = 24
         targetSdk = 34
@@ -29,6 +33,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {

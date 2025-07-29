@@ -23,6 +23,7 @@ import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.largeBold
 import com.solux.dorandoran.presentation.auth.navigation.AuthNavigator
+import com.solux.dorandoran.BuildConfig
 
 @Composable
 fun SignInRoute(navigator: AuthNavigator) {
@@ -36,8 +37,7 @@ fun SignInScreen(
 ) {
 
     val context = LocalContext.current
-    val naverLoginUrl =
-        "http://ec2-15-164-67-216.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/naver"
+    val naverLoginUrl = BuildConfig.NAVER_LOGIN_URL
 
     Column(
         modifier = modifier

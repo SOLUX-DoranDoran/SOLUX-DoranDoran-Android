@@ -33,7 +33,6 @@ object NetworkModule {
         }
     }
 
-    // 인증 없는 Retrofit (토큰 재발급용)
     @Provides
     @Singleton
     @Named("AuthRetrofit")
@@ -48,7 +47,7 @@ object NetworkModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("http://ec2-15-164-67-216.ap-northeast-2.compute.amazonaws.com:8080")
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -62,7 +61,6 @@ object NetworkModule {
         return retrofit.create(AuthApiService::class.java)
     }
 
-    // 인증이 포함된 OkHttpClient
     @Provides
     @Singleton
     fun provideOkHttpClient(
@@ -80,12 +78,11 @@ object NetworkModule {
             .build()
     }
 
-    // 일반 API용 Retrofit
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://ec2-15-164-67-216.ap-northeast-2.compute.amazonaws.com:8080")
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
