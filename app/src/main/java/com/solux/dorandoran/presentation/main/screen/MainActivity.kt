@@ -2,6 +2,7 @@ package com.solux.dorandoran.presentation.main.screen
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -51,7 +52,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import timber.log.Timber
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
@@ -108,75 +108,80 @@ class MainActivity : ComponentActivity() {
                         // 디버그 코드
                         TokenDebugUtils.logStoredTokens(context)
                         val validationResult = TokenDebugUtils.validateTokenStorage(context)
-                        Timber.tag("TokenValidation")
-                            .d("Token validation result: $validationResult")
+                        Log.d("TokenValidation", "Token validation result: $validationResult")
 
-                        // 딥링크로 토큰이 전달된 경우
                         intent.data?.let { uri ->
+                            Log.d("MainActivity", "딥링크 수신됨: ${uri.toString()}")
                             val accessToken = uri.getQueryParameter("accessToken")
                             val refreshToken = uri.getQueryParameter("refreshToken")
+                            Log.d("MainActivity", "딥링크에서 토큰 추출 - accessToken: ${accessToken?.take(20)}..., refreshToken: ${refreshToken?.take(20)}...")
+
                             if (!accessToken.isNullOrBlank() && !refreshToken.isNullOrBlank()) {
                                 loadingMessage = "네이버 로그인 처리 중..."
+                                Log.d("네이버로그인", "토큰 저장 시작")
                                 TokenManager.saveTokens(context, accessToken, refreshToken)
+                                Log.d("네이버로그인", "토큰 저장 완료")
 
                                 // 서버 연결 테스트
                                 loadingMessage = "서버 연결 확인 중..."
+                                Log.d("네이버로그인", "서버 연결 테스트 시작")
                                 val serverConnectionResult = testServerConnection(accessToken)
 
                                 if (serverConnectionResult) {
                                     isLoggedIn = true
                                     context.toast("네이버 로그인 성공!")
-                                    Timber.tag("네이버로그인")
-                                        .d("로그인 성공! accessToken: ${accessToken.take(20)}...")
+                                    Log.d("네이버로그인", "로그인 성공! accessToken: ${accessToken.take(20)}...")
                                 } else {
-                                    // 서버 연결 실패 시 토큰 삭제
                                     TokenManager.clearTokens(context)
                                     isLoggedIn = false
                                     context.toast("서버 연결에 실패했습니다. 다시 로그인해주세요.")
-                                    Timber.tag("네이버로그인").w("토큰은 받았지만 서버 연결 실패")
+                                    Log.w("네이버로그인", "토큰은 받았지만 서버 연결 실패")
                                 }
 
                                 isLoading = false
                                 TokenDebugUtils.logStoredTokens(context)
                                 return@LaunchedEffect
+                            } else {
+                                Log.w("MainActivity", "딥링크에서 토큰을 찾을 수 없음")
                             }
                         }
 
-                        // 기존 토큰 확인
+                        Log.d("MainActivity", "기존 토큰 확인 시작")
                         val existingAccessToken = TokenManager.getAccessToken(context).first()
                         val existingRefreshToken = TokenManager.getRefreshToken(context).first()
+                        Log.d("MainActivity", "기존 토큰 확인 결과 - accessToken 존재: ${!existingAccessToken.isNullOrBlank()}, refreshToken 존재: ${!existingRefreshToken.isNullOrBlank()}")
 
                         if (!existingAccessToken.isNullOrBlank() && !existingRefreshToken.isNullOrBlank()) {
-                            // 토큰이 있는 경우 서버 연결 테스트
                             loadingMessage = "서버 연결 확인 중..."
+                            Log.d("MainActivity", "기존 토큰으로 서버 연결 테스트 시작")
                             val serverConnectionResult = testServerConnection(existingAccessToken)
 
                             if (serverConnectionResult) {
                                 isLoggedIn = true
-                                Timber.tag("MainActivity").d("기존 토큰으로 서버 연결 성공")
+                                Log.d("MainActivity", "기존 토큰으로 서버 연결 성공")
                             } else {
-                                // 서버 연결 실패 시 토큰 삭제하고 로그인 화면으로
+
                                 TokenManager.clearTokens(context)
                                 isLoggedIn = false
-                                Timber.tag("MainActivity").w("기존 토큰으로 서버 연결 실패 - 토큰 삭제")
+                                Log.w("MainActivity", "기존 토큰으로 서버 연결 실패 - 토큰 삭제")
                                 context.toast("로그인이 만료되었습니다. 다시 로그인해주세요.")
                             }
                         } else {
+                            Log.d("MainActivity", "저장된 토큰이 없음 - 로그인 화면으로 이동")
                             isLoggedIn = false
                         }
 
                         isLoading = false
-                        Timber.tag("MainActivity").d("토큰 확인 완료 - isLoggedIn: $isLoggedIn")
+                        Log.d("MainActivity", "토큰 확인 완료 - isLoggedIn: $isLoggedIn")
 
                     } catch (e: Exception) {
-                        Timber.tag("MainActivity").e(e, "토큰 확인 중 오류 발생")
+                        Log.e("MainActivity", "토큰 확인 중 오류 발생", e)
                         isLoggedIn = false
                         isLoading = false
                         context.toast("앱 시작 중 오류가 발생했습니다.")
                     }
                 }
 
-                // 로딩 중일 때는 로딩 화면 표시
                 if (isLoading) {
                     LoadingScreen(message = loadingMessage)
                     return@DoranDoranTheme
@@ -204,10 +209,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // 서버 연결 테스트 함수 - 성공/실패 여부를 반환
+    // 서버 연결 테스트 함수 - 나중에 지울거에요 ~~~
     private suspend fun testServerConnection(accessToken: String): Boolean {
         return try {
-            Timber.tag("ServerTest").d("서버 연결 테스트 시작...")
+            Log.d("ServerTest", "서버 연결 테스트 시작...")
+            Log.d("ServerTest", "사용할 토큰: ${accessToken.take(20)}...")
 
             val client = OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -215,40 +221,45 @@ class MainActivity : ComponentActivity() {
                 .build()
 
             val request = Request.Builder()
-                .url("http://ec2-15-164-67-216.ap-northeast-2.compute.amazonaws.com:8080/api/user/profile")
+                .url("http://ec2-15-164-67-216.ap-northeast-2.compute.amazonaws.com:8080/api/quotes/recent")
                 .addHeader("Authorization", "Bearer $accessToken")
                 .build()
 
+            Log.d("ServerTest", "요청 URL: ${request.url}")
+            Log.d("ServerTest", "요청 헤더: ${request.headers}")
+
             withContext(Dispatchers.IO) {
                 val response = client.newCall(request).execute()
-                Timber.tag("ServerTest").d("응답 코드: ${response.code}")
-                Timber.tag("ServerTest").d("응답 메시지: ${response.message}")
+                Log.d("ServerTest", "응답 코드: ${response.code}")
+                Log.d("ServerTest", "응답 메시지: ${response.message}")
 
                 val isSuccessful = response.isSuccessful
 
                 if (isSuccessful) {
-                    Timber.tag("ServerTest").d("✅ 서버 연결 성공!")
+                    Log.d("ServerTest", "✅ 서버 연결 성공!")
                     val responseBody = response.body?.string()
-                    Timber.tag("ServerTest").d("응답 내용: ${responseBody?.take(100)}...")
+                    Log.d("ServerTest", "응답 내용: ${responseBody?.take(100)}...")
                 } else {
-                    Timber.tag("ServerTest").w("⚠️ 서버 응답 오류: ${response.code}")
+                    Log.w("ServerTest", "⚠️ 서버 응답 오류: ${response.code}")
                     when (response.code) {
-                        401 -> Timber.tag("ServerTest").w("토큰이 만료되었거나 유효하지 않음")
-                        404 -> Timber.tag("ServerTest").w("API 엔드포인트를 찾을 수 없음")
-                        500 -> Timber.tag("ServerTest").w("서버 내부 오류")
-                        else -> Timber.tag("ServerTest").w("기타 오류")
+                        401 -> Log.w("ServerTest", "토큰이 만료되었거나 유효하지 않음")
+                        404 -> Log.w("ServerTest", "API 엔드포인트를 찾을 수 없음")
+                        500 -> Log.w("ServerTest", "서버 내부 오류")
+                        else -> Log.w("ServerTest", "기타 오류")
                     }
+                    val errorBody = response.body?.string()
+                    Log.w("ServerTest", "오류 응답 내용: $errorBody")
                 }
                 response.close()
                 isSuccessful
             }
 
         } catch (e: Exception) {
-            Timber.tag("ServerTest").e(e, "❌ 서버 연결 실패")
+            Log.e("ServerTest", "❌ 서버 연결 실패", e)
             when (e) {
-                is ConnectException -> Timber.tag("ServerTest").e("서버에 연결할 수 없음")
-                is SocketTimeoutException -> Timber.tag("ServerTest").e("연결 시간 초과")
-                else -> Timber.tag("ServerTest").e("알 수 없는 네트워크 오류: ${e.message}")
+                is ConnectException -> Log.e("ServerTest", "서버에 연결할 수 없음")
+                is SocketTimeoutException -> Log.e("ServerTest", "연결 시간 초과")
+                else -> Log.e("ServerTest", "알 수 없는 네트워크 오류: ${e.message}")
             }
             false
         }

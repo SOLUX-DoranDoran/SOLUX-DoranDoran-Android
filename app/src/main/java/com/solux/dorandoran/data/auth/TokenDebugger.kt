@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.solux.dorandoran.BuildConfig
 import kotlinx.coroutines.flow.first
-import timber.log.Timber
 
-// 디버그용 토큰 확인 함수 (개발 환경에서만 사용)
 object TokenDebugUtils {
 
     suspend fun logStoredTokens(context: Context) {
@@ -15,19 +13,19 @@ object TokenDebugUtils {
                 val accessToken = TokenManager.getAccessToken(context).first()
                 val refreshToken = TokenManager.getRefreshToken(context).first()
 
-                Timber.tag("TokenDebug").d("=== 저장된 토큰 정보 ===")
-                Timber.tag("TokenDebug").d("AccessToken exists: ${!accessToken.isNullOrBlank()}")
-                Timber.tag("TokenDebug").d("RefreshToken exists: ${!refreshToken.isNullOrBlank()}")
+                Log.d("TokenDebug", "=== 저장된 토큰 정보 ===")
+                Log.d("TokenDebug", "AccessToken exists: ${!accessToken.isNullOrBlank()}")
+                Log.d("TokenDebug", "RefreshToken exists: ${!refreshToken.isNullOrBlank()}")
 
                 if (!accessToken.isNullOrBlank()) {
-                    Timber.tag("TokenDebug").d("AccessToken: ${accessToken}")
+                    Log.d("TokenDebug", "AccessToken: $accessToken")
                 }
                 if (!refreshToken.isNullOrBlank()) {
-                    Timber.tag("TokenDebug").d("RefreshToken: ${refreshToken}")
+                    Log.d("TokenDebug", "RefreshToken: $refreshToken")
                 }
 
             } catch (e: Exception) {
-                Timber.tag("TokenDebug").e(e, "토큰 확인 중 오류")
+                Log.e("TokenDebug", "토큰 확인 중 오류", e)
             }
         }
     }
@@ -51,6 +49,7 @@ object TokenDebugUtils {
                     TokenValidationResult.VALID
             }
         } catch (e: Exception) {
+            Log.e("TokenDebug", "validateTokenStorage 중 오류 발생", e)
             TokenValidationResult.ERROR
         }
     }

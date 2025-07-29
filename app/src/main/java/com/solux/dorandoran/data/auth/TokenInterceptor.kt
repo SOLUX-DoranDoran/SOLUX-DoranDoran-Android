@@ -1,6 +1,7 @@
 package com.solux.dorandoran.data.auth
 
 import android.content.Context
+import android.util.Log
 import com.solux.dorandoran.data.dto.request.ReissueRequest
 import com.solux.dorandoran.data.service.AuthApiService
 import kotlinx.coroutines.flow.first
@@ -9,7 +10,6 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import timber.log.Timber
 
 class TokenAuthenticator(
     private val context: Context,
@@ -19,6 +19,7 @@ class TokenAuthenticator(
     override fun authenticate(route: Route?, response: Response): Request? {
 
         if (response.request.header("Authorization") == null) {
+            Log.d("TokenAuthenticator", "Authorization 헤더가 없음")
             return null
         }
 
@@ -27,6 +28,7 @@ class TokenAuthenticator(
         }
 
         if (refreshToken.isNullOrBlank()) {
+            Log.d("TokenAuthenticator", "리프레시 토큰 없음 - 토큰 초기화")
 
             runBlocking {
                 TokenManager.clearTokens(context)
@@ -38,6 +40,8 @@ class TokenAuthenticator(
             val reissueResponse = runBlocking {
                 authApiService.reissueToken(ReissueRequest(refreshToken))
             }
+
+            Log.d("TokenAuthenticator", "토큰 재발급 성공 - AccessToken: ${reissueResponse.accessToken}")
 
             runBlocking {
                 TokenManager.saveTokens(
@@ -52,7 +56,7 @@ class TokenAuthenticator(
                 .build()
 
         } catch (e: Exception) {
-            Timber.tag("TokenAuthenticator").e(e, "토큰 재발급 실패")
+            Log.e("TokenAuthenticator", "토큰 재발급 실패", e)
 
             runBlocking {
                 TokenManager.clearTokens(context)
