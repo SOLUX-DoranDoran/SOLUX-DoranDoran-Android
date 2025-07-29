@@ -29,4 +29,11 @@ object TokenManager {
             prefs[REFRESH_TOKEN]
         }
     }
+
+    suspend fun clearTokens(context: Context) {
+        context.dataStore.edit { prefs ->
+            prefs.remove(ACCESS_TOKEN)
+            prefs.remove(REFRESH_TOKEN)
+        }
+    }
 }

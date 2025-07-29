@@ -1,7 +1,6 @@
 package com.solux.dorandoran.presentation.auth.screen
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Button02
@@ -73,7 +73,7 @@ fun SignInScreen(
                 .fillMaxWidth()
                 .height(80.dp)
                 .clickable {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(naverLoginUrl))
+                    val intent = Intent(Intent.ACTION_VIEW, naverLoginUrl.toUri())
                     context.startActivity(intent)
                 }
         )
