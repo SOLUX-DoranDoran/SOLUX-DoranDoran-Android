@@ -19,6 +19,11 @@ android {
     compileSdk = 35
 
     defaultConfig {
+        buildConfigField("String", "NAVER_LOGIN_URL", "\"${properties["NAVER_LOGIN_URL"]}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
+        buildConfigField("String", "GOOGLE_LOGIN_URL", "\"${properties["GOOGLE_LOGIN_URL"]}\"")
+
+
         applicationId = "com.solux.dorandoran"
         minSdk = 24
         targetSdk = 34
@@ -29,6 +34,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
@@ -136,4 +142,6 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 }
