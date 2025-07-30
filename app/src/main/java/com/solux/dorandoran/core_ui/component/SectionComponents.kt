@@ -2,7 +2,6 @@ package com.solux.dorandoran.core_ui.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,15 +40,15 @@ fun BookRecommendationSection(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .width(363.dp)
-                .padding(bottom = 10.dp)
+                .padding(bottom = 10.dp),
+            horizontalAlignment = Alignment.Start
         ) {
             SectionTitle(
                 mainText = "소설 부문 ",
                 highlightText = "추천 도서",
-                modifier = Modifier.align(Alignment.CenterStart)
             )
         }
 
@@ -212,52 +211,27 @@ private fun SectionHeader(
     ) {
         when (title) {
             "최근 리뷰" -> {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "최근 ",
-                        style = baseBold,
-                        color = Neutral60
-                    )
-                    Text(
-                        text = "리뷰",
-                        style = baseBold,
-                        color = Button02
-                    )
-                }
+                TitleWithHighlight(
+                    normalText = "최근 ",
+                    highlightText = "리뷰"
+                )
             }
             "지금 핫한 토론" -> {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "지금 핫한 ",
-                        style = baseBold,
-                        color = Neutral60
-                    )
-                    Text(
-                        text = "토론",
-                        style = baseBold,
-                        color = Button02
-                    )
-                }
+                TitleWithHighlight(
+                    normalText = "지금 핫한 ",
+                    highlightText = "토론"
+                )
             }
             "감성 공유" -> {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "감성 ",
-                        style = baseBold,
-                        color = Neutral60
-                    )
-                    Text(
-                        text = "공유",
-                        style = baseBold,
-                        color = Button02
-                    )
-                }
+                TitleWithHighlight(
+                    normalText = "감성 ",
+                    highlightText = "공유"
+                )
             }
             else -> {
-                Text(
+                ColoredText(
                     text = title,
-                    style = baseBold,
-                    color = Neutral60
+                    isHighlight = false
                 )
             }
         }
@@ -269,5 +243,34 @@ private fun SectionHeader(
                 color = Neutral60
             )
         }
+    }
+}
+
+@Composable
+private fun ColoredText(
+    text: String,
+    isHighlight: Boolean
+) {
+    Text(
+        text = text,
+        style = baseBold,
+        color = if (isHighlight) Button02 else Neutral60
+    )
+}
+
+@Composable
+private fun TitleWithHighlight(
+    normalText: String,
+    highlightText: String
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        ColoredText(
+            text = normalText,
+            isHighlight = false
+        )
+        ColoredText(
+            text = highlightText,
+            isHighlight = true
+        )
     }
 }

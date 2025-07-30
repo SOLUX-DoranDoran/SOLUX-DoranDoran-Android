@@ -37,7 +37,7 @@ import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 fun EmotionShareNewRoute(
     navigator: MypageNavigator
 ) {
-    EmotionShareNew(navigator=navigator)
+    EmotionShareNew(navigator = navigator)
 }
 
 @Composable
@@ -63,70 +63,64 @@ fun EmotionShareNew(navigator: MypageNavigator) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Column(
+        Text(
+            text = "책 이름",
+            style = baseBold,
+            color = Neutral60,
             modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "책 이름",
-                style = baseBold,
-                color = Neutral60
-            )
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = bookTitle,
-                onValueChange = { bookTitle = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Button02,
-                    unfocusedBorderColor = Neutral80,
-                    focusedContainerColor = Background01,
-                    unfocusedContainerColor = Background01
-                ),
-                shape = RoundedCornerShape(15.dp),
-                textStyle = baseRegular,
-                singleLine = true
-            )
-        }
+        OutlinedTextField(
+            value = bookTitle,
+            onValueChange = { bookTitle = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Button02,
+                unfocusedBorderColor = Neutral80,
+                focusedContainerColor = Background01,
+                unfocusedContainerColor = Background01
+            ),
+            shape = RoundedCornerShape(15.dp),
+            textStyle = baseRegular,
+            singleLine = true
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Column(
+        Text(
+            text = "명언",
+            style = baseBold,
+            color = Neutral60,
             modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "명언",
-                style = baseBold,
-                color = Neutral60
-            )
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = quote,
-                onValueChange = { newValue ->
-                    val lineBreaks = newValue.count { it == '\n' }
+        OutlinedTextField(
+            value = quote,
+            onValueChange = { newValue ->
+                val lineBreaks = newValue.count { it == '\n' }
 
-                    if (lineBreaks < 13 && newValue.length <= 500) {
-                        quote = newValue
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(310.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Button02,
-                    unfocusedBorderColor = Neutral80,
-                    focusedContainerColor = Background01,
-                    unfocusedContainerColor = Background01
-                ),
-                shape = RoundedCornerShape(15.dp),
-                textStyle = baseRegular,
-            )
-        }
+                if (lineBreaks < 10 && newValue.length <= 500) {
+                    quote = newValue
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(310.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Button02,
+                unfocusedBorderColor = Neutral80,
+                focusedContainerColor = Background01,
+                unfocusedContainerColor = Background01
+            ),
+            shape = RoundedCornerShape(15.dp),
+            textStyle = baseRegular,
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 

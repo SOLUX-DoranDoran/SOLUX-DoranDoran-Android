@@ -51,7 +51,7 @@ fun CustomSearchBar(
             .height(48.dp)
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, Neutral60, RoundedCornerShape(24.dp))
+            .border(width = 1.dp, color = Neutral60, shape = RoundedCornerShape(24.dp))
             .background(Background01),
         verticalArrangement = Arrangement.Center
     ) {
@@ -68,7 +68,7 @@ fun CustomSearchBar(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_search),
-                    contentDescription = "검색",
+                    contentDescription = null,
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
@@ -121,7 +121,7 @@ fun CustomSearchBar(
             if (searchText.isNotEmpty()) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_delete),
-                    contentDescription = "지우기",
+                    contentDescription = null,
                     modifier = Modifier
                         .size(24.dp)
                         .clickable { searchText = "" }

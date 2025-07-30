@@ -3,6 +3,7 @@ package com.solux.dorandoran.core_ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,7 +45,7 @@ fun BookRecommendationItem(
                 .clip(RoundedCornerShape(10.dp))
                 .background(Background03),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = book.title,

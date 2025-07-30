@@ -129,7 +129,7 @@ fun EmotionShareListItem(
                             } else {
                                 R.drawable.ic_emotionsharesreen_heart
                             }),
-                        contentDescription = "좋아요",
+                        contentDescription = null,
                         modifier = Modifier.size(20.dp),
                         tint = Color.Unspecified
                     )
