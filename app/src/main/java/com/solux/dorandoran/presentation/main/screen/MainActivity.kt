@@ -100,79 +100,33 @@ class MainActivity : ComponentActivity() {
                 val reviewNavigator = remember(navController) { ReviewNavigator(navController) }
                 val mypageNavigator = remember(navController) { MypageNavigator(navController) }
 
-                // 토큰 존재 여부 확인 및 서버 연결 테스트
                 LaunchedEffect(Unit) {
                     try {
                         loadingMessage = "로그인 정보 확인 중..."
-
-                        // 디버그 코드
                         TokenDebugUtils.logStoredTokens(context)
-                        val validationResult = TokenDebugUtils.validateTokenStorage(context)
-                        Log.d("TokenValidation", "Token validation result: $validationResult")
 
-                        intent.data?.let { uri ->
-                            Log.d("MainActivity", "딥링크 수신됨: ${uri.toString()}")
-                            val accessToken = uri.getQueryParameter("accessToken")
-                            val refreshToken = uri.getQueryParameter("refreshToken")
-                            Log.d("MainActivity", "딥링크에서 토큰 추출 - accessToken: ${accessToken?.take(20)}..., refreshToken: ${refreshToken?.take(20)}...")
-
-                            if (!accessToken.isNullOrBlank() && !refreshToken.isNullOrBlank()) {
-                                loadingMessage = "네이버 로그인 처리 중..."
-                                Log.d("네이버로그인", "토큰 저장 시작")
-                                TokenManager.saveTokens(context, accessToken, refreshToken)
-                                Log.d("네이버로그인", "토큰 저장 완료")
-
-                                // 서버 연결 테스트
-                                loadingMessage = "서버 연결 확인 중..."
-                                Log.d("네이버로그인", "서버 연결 테스트 시작")
-                                val serverConnectionResult = testServerConnection(accessToken)
-
-                                if (serverConnectionResult) {
-                                    isLoggedIn = true
-                                    context.toast("네이버 로그인 성공!")
-                                    Log.d("네이버로그인", "로그인 성공! accessToken: ${accessToken.take(20)}...")
-                                } else {
-                                    TokenManager.clearTokens(context)
-                                    isLoggedIn = false
-                                    context.toast("서버 연결에 실패했습니다. 다시 로그인해주세요.")
-                                    Log.w("네이버로그인", "토큰은 받았지만 서버 연결 실패")
-                                }
-
-                                isLoading = false
-                                TokenDebugUtils.logStoredTokens(context)
-                                return@LaunchedEffect
-                            } else {
-                                Log.w("MainActivity", "딥링크에서 토큰을 찾을 수 없음")
-                            }
+                        val deepLinkResult = handleDeepLinkTokens(context)
+                        if (deepLinkResult != null) {
+                            loadingMessage = "${deepLinkResult.provider} 로그인 처리 중..."
+                            isLoggedIn = processTokenLogin(
+                                context,
+                                deepLinkResult.accessToken,
+                                deepLinkResult.refreshToken,
+                                deepLinkResult.provider
+                            )
+                            isLoading = false
+                            return@LaunchedEffect
                         }
 
-                        Log.d("MainActivity", "기존 토큰 확인 시작")
-                        val existingAccessToken = TokenManager.getAccessToken(context).first()
-                        val existingRefreshToken = TokenManager.getRefreshToken(context).first()
-                        Log.d("MainActivity", "기존 토큰 확인 결과 - accessToken 존재: ${!existingAccessToken.isNullOrBlank()}, refreshToken 존재: ${!existingRefreshToken.isNullOrBlank()}")
-
-                        if (!existingAccessToken.isNullOrBlank() && !existingRefreshToken.isNullOrBlank()) {
+                        val existingTokens = getExistingTokens(context)
+                        if (existingTokens != null) {
                             loadingMessage = "서버 연결 확인 중..."
-                            Log.d("MainActivity", "기존 토큰으로 서버 연결 테스트 시작")
-                            val serverConnectionResult = testServerConnection(existingAccessToken)
-
-                            if (serverConnectionResult) {
-                                isLoggedIn = true
-                                Log.d("MainActivity", "기존 토큰으로 서버 연결 성공")
-                            } else {
-
-                                TokenManager.clearTokens(context)
-                                isLoggedIn = false
-                                Log.w("MainActivity", "기존 토큰으로 서버 연결 실패 - 토큰 삭제")
-                                context.toast("로그인이 만료되었습니다. 다시 로그인해주세요.")
-                            }
+                            isLoggedIn = validateExistingTokens(context, existingTokens.accessToken)
                         } else {
-                            Log.d("MainActivity", "저장된 토큰이 없음 - 로그인 화면으로 이동")
                             isLoggedIn = false
                         }
 
                         isLoading = false
-                        Log.d("MainActivity", "토큰 확인 완료 - isLoggedIn: $isLoggedIn")
 
                     } catch (e: Exception) {
                         Log.e("MainActivity", "토큰 확인 중 오류 발생", e)
@@ -209,11 +163,85 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // 서버 연결 테스트 함수 - 나중에 지울거에요 ~~~
+    private fun handleDeepLinkTokens(context: android.content.Context): DeepLinkTokens? {
+        return intent.data?.let { uri ->
+            Log.d("MainActivity", "딥링크 수신됨: $uri")
+            val accessToken = uri.getQueryParameter("accessToken")
+            val refreshToken = uri.getQueryParameter("refreshToken")
+
+            if (!accessToken.isNullOrBlank() && !refreshToken.isNullOrBlank()) {
+                val provider = when {
+                    uri.toString().contains("google", ignoreCase = true) -> "구글"
+                    uri.toString().contains("naver", ignoreCase = true) -> "네이버"
+                    else -> "소셜"
+                }
+                DeepLinkTokens(accessToken, refreshToken, provider)
+            } else {
+                Log.w("MainActivity", "딥링크에서 토큰을 찾을 수 없음")
+                null
+            }
+        }
+    }
+
+    private suspend fun getExistingTokens(context: android.content.Context): ExistingTokens? {
+        val accessToken = TokenManager.getAccessToken(context).first()
+        val refreshToken = TokenManager.getRefreshToken(context).first()
+
+        return if (!accessToken.isNullOrBlank() && !refreshToken.isNullOrBlank()) {
+            ExistingTokens(accessToken, refreshToken)
+        } else {
+            Log.d("MainActivity", "저장된 토큰이 없음")
+            null
+        }
+    }
+
+    private suspend fun processTokenLogin(
+        context: android.content.Context,
+        accessToken: String,
+        refreshToken: String,
+        provider: String
+    ): Boolean {
+        Log.d("${provider}로그인", "토큰 저장 시작")
+        TokenManager.saveTokens(context, accessToken, refreshToken)
+        Log.d("${provider}로그인", "토큰 저장 완료")
+
+        val serverConnectionResult = testServerConnection(accessToken)
+
+        return if (serverConnectionResult) {
+            context.toast("$provider 로그인 성공!")
+            Log.d("${provider}로그인", "로그인 성공!")
+            TokenDebugUtils.logStoredTokens(context)
+            true
+        } else {
+            TokenManager.clearTokens(context)
+            context.toast("서버 연결에 실패했습니다. 다시 로그인해주세요.")
+            Log.w("${provider}로그인", "토큰은 받았지만 서버 연결 실패")
+            false
+        }
+    }
+
+    private suspend fun validateExistingTokens(
+        context: android.content.Context,
+        accessToken: String
+    ): Boolean {
+        Log.d("MainActivity", "기존 토큰으로 서버 연결 테스트 시작")
+        val serverConnectionResult = testServerConnection(accessToken)
+
+        return if (serverConnectionResult) {
+            Log.d("MainActivity", "기존 토큰으로 서버 연결 성공")
+            true
+        } else {
+            TokenManager.clearTokens(context)
+            Log.w("MainActivity", "기존 토큰으로 서버 연결 실패 - 토큰 삭제")
+            context.toast("로그인이 만료되었습니다. 다시 로그인해주세요.")
+            false
+        }
+    }
+
+    // 서버 연결 테스트 함수
     private suspend fun testServerConnection(accessToken: String): Boolean {
         return try {
             Log.d("ServerTest", "서버 연결 테스트 시작...")
-            Log.d("ServerTest", "사용할 토큰: ${accessToken.take(20)}...")
 
             val client = OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -225,30 +253,21 @@ class MainActivity : ComponentActivity() {
                 .addHeader("Authorization", "Bearer $accessToken")
                 .build()
 
-            Log.d("ServerTest", "요청 URL: ${request.url}")
-            Log.d("ServerTest", "요청 헤더: ${request.headers}")
-
             withContext(Dispatchers.IO) {
                 val response = client.newCall(request).execute()
                 Log.d("ServerTest", "응답 코드: ${response.code}")
-                Log.d("ServerTest", "응답 메시지: ${response.message}")
 
                 val isSuccessful = response.isSuccessful
 
                 if (isSuccessful) {
                     Log.d("ServerTest", "✅ 서버 연결 성공!")
-                    val responseBody = response.body?.string()
-                    Log.d("ServerTest", "응답 내용: ${responseBody?.take(100)}...")
                 } else {
                     Log.w("ServerTest", "⚠️ 서버 응답 오류: ${response.code}")
                     when (response.code) {
                         401 -> Log.w("ServerTest", "토큰이 만료되었거나 유효하지 않음")
                         404 -> Log.w("ServerTest", "API 엔드포인트를 찾을 수 없음")
                         500 -> Log.w("ServerTest", "서버 내부 오류")
-                        else -> Log.w("ServerTest", "기타 오류")
                     }
-                    val errorBody = response.body?.string()
-                    Log.w("ServerTest", "오류 응답 내용: $errorBody")
                 }
                 response.close()
                 isSuccessful
@@ -264,6 +283,17 @@ class MainActivity : ComponentActivity() {
             false
         }
     }
+
+    private data class DeepLinkTokens(
+        val accessToken: String,
+        val refreshToken: String,
+        val provider: String
+    )
+
+    private data class ExistingTokens(
+        val accessToken: String,
+        val refreshToken: String
+    )
 }
 
 @Composable

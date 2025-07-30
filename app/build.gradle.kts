@@ -21,6 +21,7 @@ android {
     defaultConfig {
         buildConfigField("String", "NAVER_LOGIN_URL", "\"${properties["NAVER_LOGIN_URL"]}\"")
         buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
+        buildConfigField("String", "GOOGLE_LOGIN_URL", "\"${properties["GOOGLE_LOGIN_URL"]}\"")
 
 
         applicationId = "com.solux.dorandoran"

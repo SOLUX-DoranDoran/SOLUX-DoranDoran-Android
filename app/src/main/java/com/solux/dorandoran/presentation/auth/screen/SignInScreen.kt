@@ -38,6 +38,7 @@ fun SignInScreen(
 
     val context = LocalContext.current
     val naverLoginUrl = BuildConfig.NAVER_LOGIN_URL
+    val googleLoginUrl = BuildConfig.GOOGLE_LOGIN_URL
 
     Column(
         modifier = modifier
@@ -86,7 +87,8 @@ fun SignInScreen(
                 .fillMaxWidth()
                 .height(80.dp)
                 .clickable {
-                    // 구글 로그인 로직
+                    val intent = Intent(Intent.ACTION_VIEW, googleLoginUrl.toUri())
+                    context.startActivity(intent)
                 }
         )
 
