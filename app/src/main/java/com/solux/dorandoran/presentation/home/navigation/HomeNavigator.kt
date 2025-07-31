@@ -29,4 +29,8 @@ class HomeNavigator(
     fun navigateToEmotionShare() {
         navController.navigate("emotion_share")
     }
+
+    fun navigateToReviewDetail(bookId: Long) {
+        navController.navigate("review_detail/$bookId")
+    }
 }

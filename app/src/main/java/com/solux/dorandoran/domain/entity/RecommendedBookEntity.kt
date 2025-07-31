@@ -1,6 +1,6 @@
 package com.solux.dorandoran.domain.entity
 
-data class BookEntity(
+data class RecommendedBookEntity(
     val id: Long,
     val title: String,
     val author: String,

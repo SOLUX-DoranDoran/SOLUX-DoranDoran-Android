@@ -25,11 +25,11 @@ import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Neutral70
 import com.solux.dorandoran.core_ui.theme.smallBold
 import com.solux.dorandoran.core_ui.theme.smallRegular02
-import com.solux.dorandoran.domain.entity.BookEntity
+import com.solux.dorandoran.domain.entity.RecommendedBookEntity
 
 @Composable
 fun BookRecommendationItem(
-    book: BookEntity,
+    book: RecommendedBookEntity,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -77,10 +77,11 @@ fun BookRecommendationItem(
             repeat(5) { index ->
                 Image(
                     painter = painterResource(
-                        id = if (index < book.rating) {
-                            R.drawable.ic_home_star_fill
+                        // 다른 entity로 수정 필요
+                        id = if (index < 3.3f) {
+                            R.drawable.ic_star_filled
                         } else {
-                            R.drawable.ic_home_star
+                            R.drawable.ic_star
                         }
                     ),
                     contentDescription = null,

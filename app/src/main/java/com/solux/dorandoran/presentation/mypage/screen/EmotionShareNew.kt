@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Button02
@@ -32,16 +33,21 @@ import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
+import com.solux.dorandoran.presentation.mypage.viewmodel.EmotionShareViewModel
 
 @Composable
 fun EmotionShareNewRoute(
-    navigator: MypageNavigator
+    navigator: MypageNavigator,
+    viewModel: EmotionShareViewModel = hiltViewModel()
 ) {
-    EmotionShareNew(navigator = navigator)
+    EmotionShareNew(
+        navigator = navigator,
+        viewModel = viewModel
+    )
 }
 
 @Composable
-fun EmotionShareNew(navigator: MypageNavigator) {
+fun EmotionShareNew(navigator: MypageNavigator, viewModel: EmotionShareViewModel) {
     var bookTitle by remember { mutableStateOf("") }
     var quote by remember { mutableStateOf("") }
 
@@ -126,7 +132,17 @@ fun EmotionShareNew(navigator: MypageNavigator) {
 
         Button(
             onClick = {
-                navigator.navigateToEmotionShare()
+                if (quote.isNotEmpty() && bookTitle.isNotEmpty()) {
+                    // 책 제목을 bookId로 매핑
+                    val bookId = mapBookTitleToId(bookTitle)
+
+                    viewModel.postQuote(
+                        content = quote,
+                        bookId = bookId
+                    )
+
+                    navigator.navigateToEmotionShare()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,5 +161,20 @@ fun EmotionShareNew(navigator: MypageNavigator) {
         }
 
         Spacer(modifier = Modifier.height(40.dp))
+    }
+}
+
+private fun mapBookTitleToId(bookTitle: String): Long {
+    return when (bookTitle.trim().lowercase()) {
+        "나미야 잡화점의 기적" -> 1L
+        "소년이 온다" -> 2L
+        "로미오와 줄리엣" -> 3L
+        "어린 왕자" -> 4L
+        "위대한 개츠비" -> 5L
+        else -> {
+            // 새로운 책이면 서버에 먼저 등록하거나
+            // 기본값 사용 (또는 에러 처리)
+            1L
+        }
     }
 }

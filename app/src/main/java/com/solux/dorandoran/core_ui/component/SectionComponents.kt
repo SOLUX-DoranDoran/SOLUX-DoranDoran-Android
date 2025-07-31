@@ -25,15 +25,15 @@ import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.largeBold
-import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.entity.DiscussionEntity
 import com.solux.dorandoran.domain.entity.EmotionShareEntity
+import com.solux.dorandoran.domain.entity.RecommendedBookEntity
 import com.solux.dorandoran.domain.entity.ReviewEntity
 
 @Composable
 fun BookRecommendationSection(
-    books: List<BookEntity>,
-    onBookClick: (BookEntity) -> Unit,
+    books: List<RecommendedBookEntity>,
+    onBookClick: (RecommendedBookEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
