@@ -106,9 +106,9 @@ private fun RatingStars(rating: Int) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         repeat(5) { index ->
             val iconRes = if (index < rating) {
-                R.drawable.ic_home_star_fill
+                R.drawable.ic_star_filled
             } else {
-                R.drawable.ic_home_star
+                R.drawable.ic_star
             }
             Image(
                 painter = painterResource(id = iconRes),
