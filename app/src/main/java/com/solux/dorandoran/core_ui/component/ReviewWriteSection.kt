@@ -46,14 +46,12 @@ fun ReviewWriteSection(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
-        // 별점 섹션
         Text(
             text = "별점",
             style = baseBold,
-            color = Neutral60,
-            modifier = Modifier.fillMaxWidth()
+            color = Neutral60
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -65,12 +63,10 @@ fun ReviewWriteSection(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 리뷰 내용 섹션
         Text(
             text = "리뷰",
             style = baseBold,
-            color = Neutral60,
-            modifier = Modifier.fillMaxWidth()
+            color = Neutral60
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -78,12 +74,11 @@ fun ReviewWriteSection(
         ReviewContentTextField(
             value = content,
             onValueChange = onContentChange,
-            placeholder = "리뷰 내용을 남겨요 ~~"
+            placeholder = "리뷰 내용을 남겨 주세요!"
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 등록 버튼
         SubmitButton(
             onClick = onSubmit,
             enabled = rating > 0 && content.isNotBlank()
@@ -99,7 +94,7 @@ private fun InteractiveRatingStars(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(5) { index ->

@@ -77,69 +77,68 @@ fun ReviewDetailScreen(
     val newReviewContent by viewModel.newReviewContent
     val isLoading by viewModel.isLoading
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Background02)
-        ) {
-            ReviewHeader(
-                onBackClick = { navigator.navController.popBackStack() },
-                onSearchClick = {}
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Background02)
+    ) {
+        ReviewHeader(
+            onBackClick = { navigator.navController.popBackStack() },
+            onSearchClick = {}
+        )
 
-            if (isLoading) {
-                Text("Loading book details...", modifier = Modifier.padding(16.dp))
-            } else {
-                currentBook?.let { book ->
-                    BookInfoCard(
-                        book = book,
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    )
-                } ?: run {
-                    Text("Book details not available.", modifier = Modifier.padding(16.dp))
-                }
-            }
-            ReviewTabRow(
-                selectedTabIndex = selectedTabIndex,
-                onTabSelected = { index -> viewModel.updateSelectedTab(index) }
-            )
-
-            when (selectedTabIndex) {
-                0 -> {
-                    UserReviewsTab(
-                        reviews = viewModel.getReviewsWithDetails(),
-                        onLikeClick = { reviewId -> viewModel.toggleLike(reviewId) },
-                        onCommentClick = { reviewId -> viewModel.selectReviewForComment(reviewId) },
-                        onToggleComments = { reviewId -> viewModel.toggleCommentsVisibility(reviewId) }
-                    )
-                }
-                1 -> {
-                    WriteReviewTab(
-                        rating = newReviewRating,
-                        content = newReviewContent,
-                        onRatingChange = { rating -> viewModel.updateNewReviewRating(rating) },
-                        onContentChange = { content -> viewModel.updateNewReviewContent(content) },
-                        onSubmit = { viewModel.submitReview() },
-                    )
-                }
+        if (isLoading) {
+            Text("Loading book details...", modifier = Modifier.padding(16.dp))
+        } else {
+            currentBook?.let { book ->
+                BookInfoCard(
+                    book = book,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+            } ?: run {
+                Text("Book details not available.", modifier = Modifier.padding(16.dp))
             }
         }
+        ReviewTabRow(
+            selectedTabIndex = selectedTabIndex,
+            onTabSelected = { index -> viewModel.updateSelectedTab(index) }
+        )
 
-        if (selectedReviewForComment != null) {
-            Box(
-                modifier = Modifier.align(Alignment.BottomCenter)
-            ) {
-                CommentInputSection(
-                    modifier = Modifier,
-                    value = commentInputText,
-                    onValueChange = { text -> viewModel.updateCommentInput(text) },
-                    onSubmit = { viewModel.submitComment() },
-                    onCancel = { viewModel.selectReviewForComment(null) }
+        when (selectedTabIndex) {
+            0 -> {
+                UserReviewsTab(
+                    reviews = viewModel.getReviewsWithDetails(),
+                    onLikeClick = { reviewId -> viewModel.toggleLike(reviewId) },
+                    onCommentClick = { reviewId -> viewModel.selectReviewForComment(reviewId) },
+                    onToggleComments = { reviewId -> viewModel.toggleCommentsVisibility(reviewId) }
+                )
+            }
+            1 -> {
+                WriteReviewTab(
+                    rating = newReviewRating,
+                    content = newReviewContent,
+                    onRatingChange = { rating -> viewModel.updateNewReviewRating(rating) },
+                    onContentChange = { content -> viewModel.updateNewReviewContent(content) },
+                    onSubmit = { viewModel.submitReview() },
                 )
             }
         }
     }
+
+    if (selectedReviewForComment != null) {
+        Box(
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            CommentInputSection(
+                modifier = Modifier,
+                value = commentInputText,
+                onValueChange = { text -> viewModel.updateCommentInput(text) },
+                onSubmit = { viewModel.submitComment() },
+                onCancel = { viewModel.selectReviewForComment(null) }
+            )
+        }
+    }
+
 }
 
 @Composable

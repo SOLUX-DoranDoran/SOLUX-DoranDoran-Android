@@ -145,7 +145,6 @@ fun EmotionShare(
                         itemsIndexed(quoteList) { index, quote ->
                             EmotionShareListItem(
                                 quote = quote,
-                                quotelike = viewModel.getQuoteLike(quote.id),
                                 itemIndex = index,
                                 onLikeClick = {
                                     viewModel.toggleLike(quote.id)
