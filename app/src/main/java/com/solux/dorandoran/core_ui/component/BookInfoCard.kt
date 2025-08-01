@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,7 +30,7 @@ import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral70
 import com.solux.dorandoran.core_ui.theme.baseBold
-import com.solux.dorandoran.core_ui.theme.baseRegular
+import com.solux.dorandoran.core_ui.theme.largeBold
 import com.solux.dorandoran.core_ui.theme.smallRegular02
 import com.solux.dorandoran.domain.entity.BookEntity
 
@@ -45,16 +46,20 @@ fun BookInfoCard(
             .clip(RoundedCornerShape(15.dp))
             .border(
                 width = 2.dp,
-                color = Button02,
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        Background03,
+                        Button02
+                    )
+                ),
                 shape = RoundedCornerShape(15.dp)
             )
             .background(Background01)
-            .padding(20.dp)
+            .padding(40.dp)
     ) {
         Row(
             verticalAlignment = Alignment.Top
         ) {
-            // 책 표지 이미지
             AsyncImage(
                 model = book.coverImageUrl,
                 contentDescription = null,
@@ -69,13 +74,12 @@ fun BookInfoCard(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // 책 정보
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = book.title,
-                    style = baseBold,
+                    style = largeBold,
                     color = Neutral60,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -85,11 +89,11 @@ fun BookInfoCard(
 
                 Text(
                     text = book.author,
-                    style = baseRegular,
-                    color = Neutral70
+                    style = baseBold,
+                    color = Neutral60
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(35.dp))
 
                 Text(
                     text = book.publisher,

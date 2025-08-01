@@ -28,14 +28,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.R
-import com.solux.dorandoran.core_ui.component.ReviewItem
+import com.solux.dorandoran.core_ui.component.ReviewDetailItem
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
-import com.solux.dorandoran.domain.entity.ReviewEntity
+import com.solux.dorandoran.domain.entity.ReviewDetailEntity
 import com.solux.dorandoran.domain.entity.ReviewListEntity
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
 import com.solux.dorandoran.presentation.review.viewmodel.RecentReviewViewModel
@@ -67,12 +67,10 @@ fun RecentReviewScreen(
             .fillMaxSize()
             .background(Background02)
     ) {
-        // 헤더
         RecentReviewHeader(
-            onBackClick = { navigator.navController.popBackStack() }
+            onBackClick = { navigator.navigateToHome() }
         )
 
-        // 컨텐츠 영역
         when {
             isLoading -> {
                 LoadingState()
@@ -93,9 +91,7 @@ fun RecentReviewScreen(
                 ReviewListContent(
                     reviews = recentReviews,
                     onReviewClick = { reviewListEntity ->
-                        // 해당 책의 리뷰 상세 페이지로 이동
-                        // bookId는 API에서 받아와야 하지만, 현재는 더미로 1L 사용
-                        navigator.navigateToReviewDetail(1L)
+                        navigator.navigateToReviewDetail(reviewListEntity.bookId)
                     }
                 )
             }
@@ -119,7 +115,7 @@ private fun RecentReviewHeader(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
-                contentDescription = "뒤로가기",
+                contentDescription = null,
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { onBackClick() }
@@ -132,7 +128,6 @@ private fun RecentReviewHeader(
                 textAlign = TextAlign.Center
             )
 
-            // 검색 아이콘 자리 (필요시 추가)
             Spacer(modifier = Modifier.size(24.dp))
         }
 
@@ -221,40 +216,38 @@ private fun ReviewListContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(reviews) { reviewListEntity ->
-            ReviewItem(
-                review = convertToReviewEntity(reviewListEntity),
+            ReviewDetailItem(
+                reviewDetail = convertToReviewDetailEntity(reviewListEntity),
                 onClick = { onReviewClick(reviewListEntity) }
             )
         }
     }
 }
 
-// ReviewListEntity를 기존 ReviewEntity로 변환하는 헬퍼 함수
-private fun convertToReviewEntity(reviewListEntity: ReviewListEntity): ReviewEntity {
-    return ReviewEntity(
-        id = reviewListEntity.id,
+private fun convertToReviewDetailEntity(reviewListEntity: ReviewListEntity): ReviewDetailEntity {
+    return ReviewDetailEntity(
+        id = reviewListEntity.reviewId,
         bookTitle = reviewListEntity.bookTitle,
         coverImageUrl = reviewListEntity.coverImageUrl,
         content = reviewListEntity.content,
         rating = reviewListEntity.rating,
         createdAt = formatDateTime(reviewListEntity.createdAt),
         nickname = reviewListEntity.nickname,
-        profileImage = reviewListEntity.profileImage ?: "",
-        bookId = 1L, // API에서 받아와야 할 bookId (현재는 더미)
-        userId = 1L, // API에서 받아와야 할 userId (현재는 더미)
-        likeCount = 0, // 좋아요 수는 별도 API로 받아올 수 있음
-        commentCount = 0, // 댓글 수도 별도 API로 받아올 수 있음
-        isLiked = false // 현재 사용자의 좋아요 여부
+        profileImage = reviewListEntity.profileImage,
+        isLiked = false,
+        likeCount = 0,
+        commentCount = 0,
+        comments = emptyList(),
+        isCommentsVisible = false
     )
 }
 
-// 날짜 포맷팅 함수
 private fun formatDateTime(dateTimeString: String): String {
     return try {
         val dateTime = LocalDateTime.parse(dateTimeString.substring(0, 19))
-        val formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm")
+        val formatter = DateTimeFormatter.ofPattern("yy-MM-dd")
         dateTime.format(formatter)
     } catch (e: Exception) {
-        dateTimeString
+        "방금 전"
     }
 }

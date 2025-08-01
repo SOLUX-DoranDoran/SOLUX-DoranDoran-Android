@@ -48,10 +48,9 @@ import com.solux.dorandoran.presentation.review.viewmodel.ReviewViewModel
 @Composable
 fun ReviewDetailRoute(
     navigator: ReviewNavigator,
-    bookId: Long = 1L, // 네비게이션에서 전달받을 bookId
+    bookId: Long,
     viewModel: ReviewViewModel = hiltViewModel()
 ) {
-    // bookId로 ViewModel 초기화
     LaunchedEffect(bookId) {
         viewModel.initializeWithBookId(bookId)
     }
@@ -84,30 +83,30 @@ fun ReviewDetailScreen(
                 .fillMaxSize()
                 .background(Background02)
         ) {
-            // 상단 헤더
             ReviewHeader(
                 onBackClick = { navigator.navController.popBackStack() },
                 onSearchClick = {}
             )
 
-            // 책 정보 카드
-            currentBook?.let { book ->
-                BookInfoCard(
-                    book = book,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
+            if (isLoading) {
+                Text("Loading book details...", modifier = Modifier.padding(16.dp))
+            } else {
+                currentBook?.let { book ->
+                    BookInfoCard(
+                        book = book,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
+                } ?: run {
+                    Text("Book details not available.", modifier = Modifier.padding(16.dp))
+                }
             }
-
-            // 탭 메뉴
             ReviewTabRow(
                 selectedTabIndex = selectedTabIndex,
                 onTabSelected = { index -> viewModel.updateSelectedTab(index) }
             )
 
-            // 탭별 컨텐츠
             when (selectedTabIndex) {
                 0 -> {
-                    // 사용자 평 탭
                     UserReviewsTab(
                         reviews = viewModel.getReviewsWithDetails(),
                         onLikeClick = { reviewId -> viewModel.toggleLike(reviewId) },
@@ -116,7 +115,6 @@ fun ReviewDetailScreen(
                     )
                 }
                 1 -> {
-                    // 리뷰 작성하기 탭
                     WriteReviewTab(
                         rating = newReviewRating,
                         content = newReviewContent,
@@ -128,12 +126,12 @@ fun ReviewDetailScreen(
             }
         }
 
-        // 댓글 입력 섹션 (하단 오버레이)
         if (selectedReviewForComment != null) {
             Box(
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 CommentInputSection(
+                    modifier = Modifier,
                     value = commentInputText,
                     onValueChange = { text -> viewModel.updateCommentInput(text) },
                     onSubmit = { viewModel.submitComment() },
@@ -161,7 +159,7 @@ private fun ReviewHeader(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
-                contentDescription = "뒤로가기",
+                contentDescription = null,
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { onBackClick() }
@@ -176,7 +174,7 @@ private fun ReviewHeader(
 
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_search),
-                contentDescription = "검색",
+                contentDescription = null,
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { onSearchClick() }
@@ -238,7 +236,6 @@ private fun UserReviewsTab(
     onToggleComments: (Long) -> Unit
 ) {
     if (reviews.isEmpty()) {
-        // 리뷰가 없을 때의 Empty State
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center

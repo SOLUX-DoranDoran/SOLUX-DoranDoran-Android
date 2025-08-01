@@ -32,6 +32,7 @@ import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral70
+import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.smallBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
@@ -43,18 +44,17 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReviewDetailCard(
+    modifier: Modifier = Modifier,
     review: ReviewDetailEntity,
     onLikeClick: () -> Unit = {},
     onCommentClick: () -> Unit = {},
-    onToggleComments: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onToggleComments: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        // 리뷰 메인 내용
         ReviewMainContent(
             review = review,
             onLikeClick = onLikeClick,
@@ -62,7 +62,6 @@ fun ReviewDetailCard(
             onToggleComments = onToggleComments
         )
 
-        // 댓글 섹션
         if (review.isCommentsVisible && review.comments.isNotEmpty()) {
             Spacer(modifier = Modifier.height(12.dp))
             CommentsSection(comments = review.comments)
@@ -78,7 +77,6 @@ private fun ReviewMainContent(
     onToggleComments: () -> Unit
 ) {
     Column {
-        // 사용자 정보
         UserInfoRow(
             nickname = review.nickname,
             profileImage = review.profileImage,
@@ -87,12 +85,10 @@ private fun ReviewMainContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 별점
         RatingRow(rating = review.rating)
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // 리뷰 내용
         Text(
             text = review.content,
             style = baseRegular,
@@ -102,7 +98,6 @@ private fun ReviewMainContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 액션 버튼들 (좋아요, 댓글)
         ReviewActionRow(
             review = review,
             onLikeClick = onLikeClick,
@@ -121,7 +116,6 @@ private fun UserInfoRow(
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 프로필 이미지
         if (profileImage != null) {
             AsyncImage(
                 model = profileImage,
@@ -206,14 +200,13 @@ private fun ReviewActionRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 댓글 토글 버튼 (댓글이 있을 때만)
         if (review.comments.isNotEmpty()) {
             Icon(
                 imageVector = ImageVector.vectorResource(
                     id = if (review.isCommentsVisible) {
-                        R.drawable.ic_back // 접기 아이콘
+                        R.drawable.ic_reviewscreen_toggle
                     } else {
-                        R.drawable.ic_back // 펼치기 아이콘
+                        R.drawable.ic_reviewscreen_toggle
                     }
                 ),
                 contentDescription = null,
@@ -226,23 +219,18 @@ private fun ReviewActionRow(
             Spacer(modifier = Modifier.width(20.dp))
         }
 
-        // 좋아요, 댓글 버튼
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 좋아요 버튼
             ActionButton(
                 count = review.likeCount,
-                isSelected = review.isLiked,
                 onClick = onLikeClick,
-                iconRes = R.drawable.ic_emotionsharescreen_heart_fill
+                iconRes = R.drawable.ic_emotionsharesreen_heart
             )
 
-            // 댓글 버튼
-            ActionButton(
+            ActionButtonPNG(
                 count = review.commentCount,
-                isSelected = false,
                 onClick = onCommentClick,
                 iconRes = R.drawable.ic_reviewscreen_comment
             )
@@ -253,31 +241,68 @@ private fun ReviewActionRow(
 @Composable
 private fun ActionButton(
     count: Int,
-    isSelected: Boolean,
     onClick: () -> Unit,
     iconRes: Int
 ) {
     Row(
-        modifier = Modifier
-            .clip(CircleShape)
-            .background(if (isSelected) Button02 else Background03)
-            .clickable { onClick() }
-            .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = iconRes),
-            contentDescription = null,
-            modifier = Modifier.size(16.dp),
-            tint = if (isSelected) Background01 else Neutral60
-        )
-
         Text(
             text = count.toString(),
             style = smallRegular,
-            color = if (isSelected) Background01 else Neutral60
+            color = Neutral60
         )
+
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Button02)
+                .clickable { onClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = iconRes),
+                contentDescription = null,
+                tint = Background01,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ActionButtonPNG(
+    count: Int,
+    onClick: () -> Unit,
+    iconRes: Int
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = count.toString(),
+            style = smallRegular,
+            color = Neutral60
+        )
+
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Button02)
+                .clickable { onClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Background01)
+            )
+        }
     }
 }
 
@@ -301,43 +326,43 @@ private fun CommentItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 24.dp)
     ) {
-        // 댓글 내용
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "ㄴ",
-                style = smallRegular,
+                text = "ᄂ",
+                style = baseBold,
                 color = Neutral70,
                 modifier = Modifier.padding(end = 8.dp)
             )
 
             Text(
-                text = "@${comment.nickname}",
-                style = smallBold,
+                text = "@${comment.parentCommentNickname}",
+                style = baseBold,
                 color = Neutral60
-            )
-
-            Spacer(modifier = Modifier.width(4.dp))
-
-            Text(
-                text = comment.content,
-                style = smallRegular,
-                color = Neutral60,
-                modifier = Modifier.weight(1f)
             )
         }
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        // 댓글 작성자 정보
+        Text(
+            text = comment.content,
+            style = smallRegular,
+            color = Neutral60,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Row(
-            modifier = Modifier.padding(start = 24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 댓글 작성자 프로필
             if (comment.profileImage != null) {
                 AsyncImage(
                     model = comment.profileImage,
@@ -358,34 +383,42 @@ private fun CommentItem(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Column {
-                Text(
-                    text = comment.nickname,
-                    style = smallRegular02,
-                    color = Neutral70
-                )
+            Text(
+                text = comment.nickname,
+                style = smallRegular02,
+                color = Neutral60
+            )
 
-                Text(
-                    text = formatDateTime(comment.createdAt),
-                    style = smallRegular02,
-                    color = Neutral70
-                )
-            }
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = "|",
+                style = smallRegular02,
+                color = Neutral70
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = formatDateTime(comment.createdAt),
+                style = smallRegular02,
+                color = Neutral70
+            )
         }
     }
 }
 
-// 날짜 시간 포맷팅 함수
 private fun formatDateTime(dateTimeString: String): String {
     return try {
         if (dateTimeString == "방금 전") {
             dateTimeString
         } else {
             val dateTime = LocalDateTime.parse(dateTimeString.substring(0, 19))
-            val formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm")
+            val formatter = DateTimeFormatter.ofPattern("yy-MM-dd")
             dateTime.format(formatter)
         }
     } catch (e: Exception) {
+        println(e)
         dateTimeString
     }
 }

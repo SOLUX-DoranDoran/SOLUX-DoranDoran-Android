@@ -1,7 +1,8 @@
 package com.solux.dorandoran.domain.entity
 
 data class ReviewListEntity(
-    val id: Long,
+    val reviewId: Long,
+    val bookId: Long,
     val bookTitle: String,
     val coverImageUrl: String,
     val content: String,

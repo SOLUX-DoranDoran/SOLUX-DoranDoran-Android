@@ -5,6 +5,7 @@ import com.solux.dorandoran.domain.entity.ReviewCommentEntity
 
 fun ResponseGetCommentItemDto.toReviewCommentEntity() = ReviewCommentEntity(
     id = id,
+    parentCommentNickname = parentCommentNickname,
     nickname = nickname,
     profileImage = profileImage,
     content = content,

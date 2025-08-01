@@ -10,6 +10,5 @@ data class ResponseGetBookDto(
     @SerialName("author") val author: String,
     @SerialName("publisher") val publisher: String,
     @SerialName("publisherDate") val publisherDate: String,
-    @SerialName("category") val category: String,
     @SerialName("coverImageUrl") val coverImageUrl: String
 )

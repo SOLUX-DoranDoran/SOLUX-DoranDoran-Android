@@ -70,8 +70,9 @@ fun HomeScreen(
             RecentReviewsSection(
                 review = viewModel.recentReview,
                 onReviewClick = { reviewId ->
-                    val bookId = viewModel.recentReview?.bookId ?: 1L
-                    navigator.navigateToReviewDetail(bookId)
+                    viewModel.recentReview?.let {
+                        review -> navigator.navigateToReviewDetail(review.bookId)
+                    }
                 },
                 onMoreClick = {
                     navigator.navigateToRecentReview()

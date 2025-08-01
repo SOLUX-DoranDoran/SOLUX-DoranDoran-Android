@@ -38,7 +38,7 @@ import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
-import com.solux.dorandoran.presentation.review.screen.ReviewDetailRoute
+import com.solux.dorandoran.presentation.review.screen.RecentReviewRoute
 
 
 @Composable
@@ -124,7 +124,9 @@ fun MainScreen(
 
                 }
                 2 -> {
-                    ReviewDetailRoute(navigator = ReviewNavigator(navController = navController))
+                    RecentReviewRoute(
+                        navigator = ReviewNavigator(navController = navController)
+                    )
                 }
                 3 -> {
                     MypageRoute(navigator = MypageNavigator(navController = navController))

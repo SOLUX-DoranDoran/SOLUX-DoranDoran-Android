@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponseGetRecentReviewDto(
-    @SerialName("id") val id: Long,
+    @SerialName("reviewId") val reviewId: Long,
+    @SerialName("bookId") val bookId: Long,
     @SerialName("bookTitle") val bookTitle: String,
     @SerialName("coverImageUrl") val coverImageUrl: String,
     @SerialName("content") val content: String,

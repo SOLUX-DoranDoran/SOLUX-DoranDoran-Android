@@ -1,5 +1,6 @@
 package com.solux.dorandoran.presentation.review.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -7,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solux.dorandoran.domain.entity.BookEntity
 import com.solux.dorandoran.domain.entity.BookReviewsResponseEntity
-import com.solux.dorandoran.domain.entity.ReviewCommentEntity
 import com.solux.dorandoran.domain.entity.ReviewDetailEntity
 import com.solux.dorandoran.domain.repository.BookRepository
 import com.solux.dorandoran.domain.repository.ReviewRepository
@@ -21,44 +21,36 @@ class ReviewViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository
 ) : ViewModel() {
 
-    // 탭 선택 상태
     private val _selectedTabIndex = mutableIntStateOf(0)
     val selectedTabIndex: State<Int> = _selectedTabIndex
 
-    // 현재 선택된 책 정보
     private val _currentBook = mutableStateOf<BookEntity?>(null)
     val currentBook: State<BookEntity?> = _currentBook
 
-    // 해당 도서의 리뷰 목록
     private val _bookReviews = mutableStateOf<BookReviewsResponseEntity?>(null)
     val bookReviews: State<BookReviewsResponseEntity?> = _bookReviews
 
-    // 리뷰 상세 정보 (좋아요, 댓글 포함)
     private val _reviewDetails = mutableStateOf<Map<Long, ReviewDetailEntity>>(emptyMap())
     val reviewDetails: State<Map<Long, ReviewDetailEntity>> = _reviewDetails
 
-    // 새 리뷰 작성
     private val _newReviewRating = mutableIntStateOf(0)
     val newReviewRating: State<Int> = _newReviewRating
 
     private val _newReviewContent = mutableStateOf("")
     val newReviewContent: State<String> = _newReviewContent
 
-    // 댓글 입력
     private val _commentInputText = mutableStateOf("")
     val commentInputText: State<String> = _commentInputText
 
     private val _selectedReviewForComment = mutableStateOf<Long?>(null)
     val selectedReviewForComment: State<Long?> = _selectedReviewForComment
 
-    // 로딩 상태
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
     private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
 
-    // 현재 bookId
     private var currentBookId: Long = 1L
 
     fun initializeWithBookId(bookId: Long) {
@@ -88,10 +80,9 @@ class ReviewViewModel @Inject constructor(
                 .onSuccess { bookReviewsResponse ->
                     _bookReviews.value = bookReviewsResponse
 
-                    // 각 리뷰에 대한 상세 정보 초기화
                     val reviewDetailsMap = bookReviewsResponse.reviews.associate { review ->
-                        review.id to ReviewDetailEntity(
-                            id = review.id,
+                        review.reviewId to ReviewDetailEntity(
+                            id = review.reviewId,
                             bookTitle = review.bookTitle,
                             coverImageUrl = review.coverImageUrl,
                             content = review.content,
@@ -99,17 +90,16 @@ class ReviewViewModel @Inject constructor(
                             createdAt = review.createdAt,
                             nickname = review.nickname,
                             profileImage = review.profileImage,
-                            isLiked = false, // 초기값
-                            likeCount = 0, // 초기값
-                            commentCount = 0, // 초기값
+                            isLiked = false,
+                            likeCount = 0,
+                            commentCount = 0,
                             comments = emptyList(),
                             isCommentsVisible = false
                         )
                     }
                     _reviewDetails.value = reviewDetailsMap
 
-                    // 각 리뷰의 댓글 수 로드
-                    loadCommentsForReviews(bookReviewsResponse.reviews.map { it.id })
+                    loadCommentsForReviews(bookReviewsResponse.reviews.map { it.reviewId })
                 }
                 .onFailure { error ->
                     _errorMessage.value = error.message ?: "리뷰를 불러오는데 실패했습니다."
@@ -136,18 +126,15 @@ class ReviewViewModel @Inject constructor(
                     )
                     _reviewDetails.value = _reviewDetails.value + (reviewId to updatedDetail)
                 }
-                .onFailure { error ->
-                    // 댓글 로드 실패는 조용히 처리 (필수가 아니므로)
-                }
+                .onFailure { error -> }
+
         }
     }
 
-    // 탭 전환
     fun updateSelectedTab(index: Int) {
         _selectedTabIndex.intValue = index
     }
 
-    // 새 리뷰 작성 관련
     fun updateNewReviewRating(rating: Int) {
         _newReviewRating.intValue = rating
     }
@@ -160,20 +147,17 @@ class ReviewViewModel @Inject constructor(
         if (_newReviewRating.intValue > 0 && _newReviewContent.value.isNotBlank()) {
             viewModelScope.launch {
                 _isLoading.value = true
-
                 reviewRepository.createReview(
                     bookId = currentBookId,
                     content = _newReviewContent.value,
                     rating = _newReviewRating.intValue
                 )
                     .onSuccess { response ->
-                        // 리뷰 작성 성공 - 목록 새로고침
                         loadBookReviews(currentBookId)
 
-                        // 폼 초기화
                         _newReviewRating.intValue = 0
                         _newReviewContent.value = ""
-                        _selectedTabIndex.intValue = 0 // 사용자 평 탭으로 이동
+                        _selectedTabIndex.intValue = 0
                     }
                     .onFailure { error ->
                         _errorMessage.value = error.message ?: "리뷰 작성에 실패했습니다."
@@ -184,7 +168,6 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    // 좋아요 토글
     fun toggleLike(reviewId: Long) {
         viewModelScope.launch {
             reviewRepository.toggleReviewLike(reviewId = reviewId)
@@ -202,7 +185,6 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    // 댓글 관련
     fun updateCommentInput(text: String) {
         _commentInputText.value = text
     }
@@ -216,31 +198,37 @@ class ReviewViewModel @Inject constructor(
         val commentText = _commentInputText.value
 
         if (commentText.isNotBlank()) {
-            val currentDetail = _reviewDetails.value[selectedReviewId] ?: return
+            viewModelScope.launch {
+                _isLoading.value = true
 
-            val newComment = ReviewCommentEntity(
-                id = System.currentTimeMillis(),
-                nickname = "나",
-                profileImage = null,
-                content = commentText,
-                createdAt = "방금 전"
-            )
+                reviewRepository.createReviewComment(
+                    reviewId = selectedReviewId,
+                    content = commentText
+                )
+                    .onSuccess { response ->
 
-            val updatedDetail = currentDetail.copy(
-                comments = currentDetail.comments + newComment,
-                commentCount = currentDetail.commentCount + 1,
-                isCommentsVisible = true
-            )
+                        loadReviewComments(selectedReviewId)
 
-            _reviewDetails.value = _reviewDetails.value + (selectedReviewId to updatedDetail)
+                        val currentDetail = _reviewDetails.value[selectedReviewId]
+                        if (currentDetail != null) {
+                            val updatedDetail = currentDetail.copy(
+                                isCommentsVisible = true
+                            )
+                            _reviewDetails.value = _reviewDetails.value + (selectedReviewId to updatedDetail)
+                        }
 
-            // 입력 폼 초기화
-            _commentInputText.value = ""
-            _selectedReviewForComment.value = null
+                        _commentInputText.value = ""
+                        _selectedReviewForComment.value = null
+                    }
+                    .onFailure { error ->
+                        _errorMessage.value = error.message ?: "댓글 작성에 실패했습니다."
+                    }
+
+                _isLoading.value = false
+            }
         }
     }
 
-    // 댓글 표시/숨김 토글
     fun toggleCommentsVisibility(reviewId: Long) {
         val currentDetail = _reviewDetails.value[reviewId] ?: return
         val updatedDetail = currentDetail.copy(
@@ -250,11 +238,10 @@ class ReviewViewModel @Inject constructor(
         _reviewDetails.value = _reviewDetails.value + (reviewId to updatedDetail)
     }
 
-    // Helper 함수: 리뷰 목록을 상세 정보와 함께 반환
     fun getReviewsWithDetails(): List<ReviewDetailEntity> {
         val reviews = _bookReviews.value?.reviews ?: emptyList()
         return reviews.mapNotNull { review ->
-            _reviewDetails.value[review.id]
+            _reviewDetails.value[review.reviewId]
         }
     }
 

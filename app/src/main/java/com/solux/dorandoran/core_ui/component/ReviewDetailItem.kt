@@ -35,11 +35,11 @@ import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral70
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.domain.entity.ReviewEntity
+import com.solux.dorandoran.domain.entity.ReviewDetailEntity
 
 @Composable
-fun ReviewItem(
-    review: ReviewEntity,
+fun ReviewDetailItem(
+    reviewDetail: ReviewDetailEntity,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -59,24 +59,25 @@ fun ReviewItem(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            BookImageBox(review = review)
+            BookImageBox(coverImageUrl = reviewDetail.coverImageUrl)
 
             Spacer(modifier = Modifier.width(20.dp))
 
-            ReviewContent(review = review)
+            ReviewDetailContent(reviewDetail = reviewDetail)
         }
     }
 }
 
 @Composable
-fun BookImageBox(
-    review: ReviewEntity
+private fun BookImageBox(
+    coverImageUrl: String
 ) {
     AsyncImage(
-        model = review.coverImageUrl,
+        model = coverImageUrl,
         contentDescription = null,
         modifier = Modifier
-            .size(width = 107.dp, height = 155.dp)
+            .width(107.dp)
+            .height(155.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(Background03),
         contentScale = ContentScale.Crop,
@@ -86,28 +87,30 @@ fun BookImageBox(
 }
 
 @Composable
-private fun ReviewContent(review: ReviewEntity) {
+private fun ReviewDetailContent(reviewDetail: ReviewDetailEntity) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = review.bookTitle,
+            text = reviewDetail.bookTitle,
             style = baseBold,
             color = Neutral60
         )
 
-        RatingStars(rating = review.rating)
+        RatingStars(rating = reviewDetail.rating)
 
         Text(
-            text = review.content,
+            text = reviewDetail.content,
             style = smallRegular,
             color = Neutral70,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 3
         )
 
         ReviewerInfo(
-            nickname = review.nickname,
-            createdAt = review.createdAt
+            nickname = reviewDetail.nickname,
+            createdAt = reviewDetail.createdAt,
+            profileImage = reviewDetail.profileImage
         )
     }
 }
@@ -131,15 +134,32 @@ private fun RatingStars(rating: Int) {
 }
 
 @Composable
-private fun ReviewerInfo(nickname: String, createdAt: String) {
+private fun ReviewerInfo(
+    nickname: String,
+    createdAt: String,
+    profileImage: String?
+) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clip(CircleShape)
-                    .background(Background03)
-            )
+            if (profileImage != null) {
+                AsyncImage(
+                    model = profileImage,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(id = R.drawable.ic_launcher_background),
+                    error = painterResource(id = R.drawable.ic_launcher_background)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(Background03)
+                )
+            }
 
             Spacer(modifier = Modifier.width(8.dp))
 

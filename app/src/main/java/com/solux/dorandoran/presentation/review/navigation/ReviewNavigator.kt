@@ -13,7 +13,7 @@ class ReviewNavigator(
         navController.navigate("recent_review")
     }
 
-    fun navigateBack() {
-        navController.popBackStack()
+    fun navigateToHome() {
+        navController.navigate("home")
     }
 }

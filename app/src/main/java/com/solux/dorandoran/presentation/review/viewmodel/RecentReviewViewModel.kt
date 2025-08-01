@@ -54,26 +54,6 @@ class RecentReviewViewModel @Inject constructor(
         loadRecentReviews()
     }
 
-    fun loadMoreReviews() {
-        // 페이징 처리 (필요시 구현)
-        viewModelScope.launch {
-            val currentList = _recentReviews.value
-            val nextPage = (currentList.size / 20) + 1
-
-            reviewRepository.getRecentReviews(
-                sort = "recent",
-                page = nextPage,
-                size = 20
-            )
-                .onSuccess { newReviews ->
-                    _recentReviews.value = currentList + newReviews
-                }
-                .onFailure { error ->
-                    _errorMessage.value = error.message ?: "추가 리뷰를 불러오는데 실패했습니다."
-                }
-        }
-    }
-
     fun clearErrorMessage() {
         _errorMessage.value = null
     }
