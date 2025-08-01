@@ -218,7 +218,9 @@ private fun ReviewListContent(
         items(reviews) { reviewListEntity ->
             ReviewDetailItem(
                 reviewDetail = convertToReviewDetailEntity(reviewListEntity),
-                onClick = { onReviewClick(reviewListEntity) }
+                onClick = {
+                    onReviewClick(reviewListEntity)
+                }
             )
         }
     }

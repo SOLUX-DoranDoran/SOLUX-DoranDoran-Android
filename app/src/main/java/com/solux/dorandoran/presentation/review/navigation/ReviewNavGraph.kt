@@ -15,9 +15,17 @@ fun NavGraphBuilder.reviewNavGraph(
     }
 
     composable(route = "review_detail/{bookId}", arguments = listOf(
-        navArgument("bookId") { type = NavType.LongType }
+        navArgument("bookId") {
+            type = NavType.LongType
+            defaultValue = 1L
+        }
     )) { backStackEntry ->
-        val bookId = backStackEntry.arguments?.getString("bookId")?. toLongOrNull() ?: 1L
+        val bookId = try {
+            backStackEntry.arguments?.getLong("bookId", 1L) ?: 1L
+        } catch (e: Exception) {
+            1L
+        }
+
         ReviewDetailRoute(
             navigator = navigator,
             bookId = bookId
