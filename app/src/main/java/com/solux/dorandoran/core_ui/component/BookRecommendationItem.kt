@@ -16,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Neutral70
@@ -39,20 +41,17 @@ fun BookRecommendationItem(
             .clickable { onClick() },
         horizontalAlignment = Alignment.Start
     ) {
-        Column(
+        AsyncImage(
+            model = book.coverImageUrl,
+            contentDescription = null,
             modifier = Modifier
                 .size(88.dp, 127.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(Background03),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = book.title,
-                style = smallBold,
-                textAlign = TextAlign.Center
-            )
-        }
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(id = R.drawable.ic_launcher_background),
+            error = painterResource(id = R.drawable.ic_launcher_background)
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -77,7 +76,6 @@ fun BookRecommendationItem(
             repeat(5) { index ->
                 Image(
                     painter = painterResource(
-                        // 다른 entity로 수정 필요
                         id = if (index < 3.3f) {
                             R.drawable.ic_star_filled
                         } else {

@@ -114,7 +114,7 @@ fun EmotionShareItem(
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Text(
-                    text = emotion.userName,
+                    text = emotion.nickname,
                     style = smallRegular,
                     color = Neutral60,
                     maxLines = 1,

@@ -3,7 +3,6 @@ package com.solux.dorandoran.app.di
 import com.solux.dorandoran.data.service.QuoteApiService
 import com.solux.dorandoran.data.service.BookApiService
 import com.solux.dorandoran.data.service.ExampleApiService
-import com.solux.dorandoran.data.service.QuoteLikeApiService
 import com.solux.dorandoran.data.service.RecommendedBookApiService
 import com.solux.dorandoran.data.service.ReviewApiService
 import dagger.Module
@@ -40,12 +39,6 @@ object ServiceModule {
     fun provideQuoteService(
         @DoranDoranRetrofit retrofit: Retrofit
     ): QuoteApiService = retrofit.create(QuoteApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideQuoteLikeService(
-        @DoranDoranRetrofit retrofit: Retrofit
-    ): QuoteLikeApiService = retrofit.create(QuoteLikeApiService::class.java)
 
     @Provides
     @Singleton

@@ -1,11 +1,14 @@
 package com.solux.dorandoran.domain.entity
 
 data class DiscussionEntity(
-    val id: Long,
+    val boardId: Long,
+    val bookId: Long,
+    val memberId: Long,
     val title: String,
+    val content: String,
+    val createdAt: String,
     val bookTitle: String,
     val author: String,
-    val participantCount: Int,
     val imageUrl: String,
     val userProfileImage: String
 )

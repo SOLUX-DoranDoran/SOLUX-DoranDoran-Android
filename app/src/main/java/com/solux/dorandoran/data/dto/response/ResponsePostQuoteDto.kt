@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResponsePostQuoteDto(
-    @SerialName("message") val message: String,
-    @SerialName("quoteId") val quoteId: Long
+    @SerialName("quoteId") val quoteId: Long,
+    @SerialName("bookId") val bookId: Long,
+    @SerialName("message") val message: String
 )

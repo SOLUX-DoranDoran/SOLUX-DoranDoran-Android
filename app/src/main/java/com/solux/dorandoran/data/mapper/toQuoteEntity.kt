@@ -11,5 +11,7 @@ fun ResponseGetQuoteDto.toQuoteEntity() = QuoteEntity(
     content = content,
     createdAt = createdAt,
     nickname = nickname,
-    profileImage = profileImage
+    profileImage = profileImage,
+    isLiked = false,
+    likeCount = 0
 )

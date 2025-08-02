@@ -16,7 +16,7 @@ import com.solux.dorandoran.core_ui.component.BookRecommendationSection
 import com.solux.dorandoran.core_ui.component.CustomSearchBar
 import com.solux.dorandoran.core_ui.component.EmotionShareSection
 import com.solux.dorandoran.core_ui.component.HotDiscussionsSection
-import com.solux.dorandoran.core_ui.component.RecentReviewsSection
+import com.solux.dorandoran.core_ui.component.RecentReviewSection
 import com.solux.dorandoran.core_ui.theme.Background02
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.viewmodel.HomeViewModel
@@ -36,6 +36,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val recommendedBooks by viewModel.recommendedBooks
+    val recentReviewList by viewModel.recentReviewList
+    val recentEmotionShare by viewModel.recentEmotionShare
     val isLoading by viewModel.isLoading
 
     LazyColumn(
@@ -60,24 +62,27 @@ fun HomeScreen(
                 BookRecommendationSection(
                     books = recommendedBooks,
                     onBookClick = { recommendedBook ->
-                        navigator.navigateToRecentReview()
+                        navigator.navigateToReviewDetail(recommendedBook.id)
                     }
                 )
             }
         }
 
         item {
-            RecentReviewsSection(
-                review = viewModel.recentReview,
-                onReviewClick = { reviewId ->
-                    viewModel.recentReview?.let {
-                        review -> navigator.navigateToReviewDetail(review.bookId)
+            println("DEBUG: recentReviewList = $recentReviewList")
+            recentReviewList?.let { reviewList ->
+                RecentReviewSection(
+                    review = reviewList,
+                    onReviewClick = { reviewId: Long ->
+                        navigator.navigateToReviewDetail(reviewList.bookId)
+                    },
+                    onMoreClick = {
+                        navigator.navigateToRecentReview()
                     }
-                },
-                onMoreClick = {
-                    navigator.navigateToRecentReview()
-                }
-            )
+                )
+            } ?: run {
+                println("DEBUG: recentReviewList is null")
+            }
         }
 
         item {
@@ -93,15 +98,17 @@ fun HomeScreen(
         }
 
         item {
-            EmotionShareSection(
-                emotionShare = viewModel.emotionShares,
-                onEmotionClick = { emotionId ->
-                    navigator.navigateToEmotionShare()
-                },
-                onMoreClick = {
-                    navigator.navigateToEmotionShare()
-                }
-            )
+            recentEmotionShare?.let { quote ->
+                EmotionShareSection(
+                    quote = quote,
+                    onEmotionClick = { quoteId ->
+                        navigator.navigateToEmotionShare()
+                    },
+                    onMoreClick = {
+                        navigator.navigateToEmotionShare()
+                    }
+                )
+            }
         }
 
         item {

@@ -19,6 +19,13 @@ interface ReviewDataSource {
         size: Int = 10
     ): List<ResponseGetRecentReviewDto>
 
+    suspend fun getRecentReview(
+        token: String,
+        sort: String = "recent",
+        page: Int = 1,
+        size: Int = 1
+    ): ResponseGetRecentReviewDto
+
     suspend fun getBookReviews(
         token: String,
         bookId: Long,

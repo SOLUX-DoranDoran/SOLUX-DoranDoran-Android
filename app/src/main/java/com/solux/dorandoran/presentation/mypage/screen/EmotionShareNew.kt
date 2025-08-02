@@ -133,8 +133,7 @@ fun EmotionShareNew(navigator: MypageNavigator, viewModel: EmotionShareViewModel
         Button(
             onClick = {
                 if (quote.isNotEmpty() && bookTitle.isNotEmpty()) {
-                    // 책 제목을 bookId로 매핑
-                    val bookId = mapBookTitleToId(bookTitle)
+                    val bookId = findBookIdByTitle(bookTitle)
 
                     viewModel.postQuote(
                         content = quote,
@@ -164,17 +163,33 @@ fun EmotionShareNew(navigator: MypageNavigator, viewModel: EmotionShareViewModel
     }
 }
 
-private fun mapBookTitleToId(bookTitle: String): Long {
-    return when (bookTitle.trim().lowercase()) {
+private fun findBookIdByTitle(bookTitle: String): Long {
+    return when (bookTitle.trim()) {
         "나미야 잡화점의 기적" -> 1L
-        "소년이 온다" -> 2L
-        "로미오와 줄리엣" -> 3L
-        "어린 왕자" -> 4L
-        "위대한 개츠비" -> 5L
+        "미드나잇 라이브러리" -> 2L
+        "파친코" -> 3L
+        "데미안" -> 4L
+        "달러구트 꿈 백화점" -> 5L
+        "불편한 편의점" -> 6L
+        "아몬드" -> 7L
+        "쇼코의 미소" -> 8L
+        "소년이 온다" -> 9L
+        "아가미" -> 10L
         else -> {
-            // 새로운 책이면 서버에 먼저 등록하거나
-            // 기본값 사용 (또는 에러 처리)
-            1L
+            when {
+                bookTitle.contains("나미야", ignoreCase = true) -> 1L
+                bookTitle.contains("미드나잇", ignoreCase = true) || bookTitle.contains("라이브러리", ignoreCase = true) -> 2L
+                bookTitle.contains("파친코", ignoreCase = true) -> 3L
+                bookTitle.contains("데미안", ignoreCase = true) -> 4L
+                bookTitle.contains("달러구트", ignoreCase = true) || bookTitle.contains("백화점", ignoreCase = true) -> 5L
+                bookTitle.contains("불편한", ignoreCase = true) || bookTitle.contains("편의점", ignoreCase = true) -> 6L
+                bookTitle.contains("아몬드", ignoreCase = true) -> 7L
+                bookTitle.contains("쇼코", ignoreCase = true) || bookTitle.contains("미소", ignoreCase = true) -> 8L
+                bookTitle.contains("소년", ignoreCase = true) -> 9L
+                bookTitle.contains("아가미", ignoreCase = true) -> 10L
+
+                else -> 1L
+            }
         }
     }
 }
