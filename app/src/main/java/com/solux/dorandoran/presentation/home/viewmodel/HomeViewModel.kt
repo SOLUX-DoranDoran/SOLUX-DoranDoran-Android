@@ -5,14 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solux.dorandoran.domain.entity.DiscussionEntity
-import com.solux.dorandoran.domain.entity.EmotionShareEntity
 import com.solux.dorandoran.domain.entity.QuoteEntity
 import com.solux.dorandoran.domain.entity.RecommendedBookEntity
 import com.solux.dorandoran.domain.entity.ReviewListEntity
+import com.solux.dorandoran.domain.repository.DiscussionRepository
 import com.solux.dorandoran.domain.repository.QuoteRepository
 import com.solux.dorandoran.domain.repository.RecommendedBookRepository
 import com.solux.dorandoran.domain.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val recommendedBookRepository: RecommendedBookRepository,
     private val reviewRepository: ReviewRepository,
+    private val discussionRepository: DiscussionRepository,
     private val quoteRepository: QuoteRepository
 ) : ViewModel() {
 
@@ -28,6 +30,9 @@ class HomeViewModel @Inject constructor(
 
     private val _recentReviewList = mutableStateOf<ReviewListEntity?>(null)
     val recentReviewList: State<ReviewListEntity?> = _recentReviewList
+
+    private val _hotDiscussions = mutableStateOf<DiscussionEntity?>(null)
+    val hotDiscussions: State<DiscussionEntity?> = _hotDiscussions
 
     private val _recentEmotionShare = mutableStateOf<QuoteEntity?>(null)
     val recentEmotionShare: State<QuoteEntity?> = _recentEmotionShare
@@ -39,98 +44,101 @@ class HomeViewModel @Inject constructor(
     val errorMessage: State<String?> = _errorMessage
 
     init {
-        getRecommendedBooks()
-        getRecentReview()
-        getRecentEmotionShare()
+        loadAllData()
     }
 
-    private fun getRecommendedBooks() {
+    private fun loadAllData() {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
 
+            try {
+                val recommendedBooksDeferred = async { getRecommendedBooksData() }
+                val recentReviewDeferred = async { getRecentReviewData() }
+                val recentEmotionShareDeferred = async { getRecentEmotionShareData() }
+                val recentDiscussionDeferred = async { getRecentDiscussionData() }
+
+                recommendedBooksDeferred.await()
+                recentReviewDeferred.await()
+                recentEmotionShareDeferred.await()
+                recentDiscussionDeferred.await()
+
+            } catch (e: Exception) {
+                _errorMessage.value = "데이터 로딩 중 오류가 발생했습니다: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    private suspend fun getRecommendedBooksData() {
+        try {
             recommendedBookRepository.getRecommendedBooks()
                 .onSuccess { books ->
                     _recommendedBooks.value = books
                 }
                 .onFailure { error ->
-                    _errorMessage.value = error.message
                 }
-
-            _isLoading.value = false
+        } catch (e: Exception) {
+            println("ERROR: 추천 도서 로딩 중 예외 - ${e.message}")
         }
     }
 
-    private fun getRecentReview() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _errorMessage.value = null
+    private suspend fun getRecentReviewData() {
+        try {
+            val result = reviewRepository.getRecentReviews(
+                sort = "recent",
+                page = 1,
+                size = 1
+            )
 
-            try {
-                val result = reviewRepository.getRecentReviews(
-                    sort = "recent",
-                    page = 1,
-                    size = 1
-                )
-
-                result
-                    .onSuccess { reviewList ->
-                        _recentReviewList.value = reviewList.firstOrNull()
-
-                    }
-                    .onFailure { error ->
-                        _errorMessage.value = "최근 리뷰 로딩 실패: ${error.message}"
-                        _recentReviewList.value = null
-                    }
-
-            } catch (e: Exception) {
-                _errorMessage.value = "최근 리뷰 로딩 중 알 수 없는 에러 발생: ${e.message}"
-                _recentReviewList.value = null
-            } finally {
-                _isLoading.value = false
-            }
+            result
+                .onSuccess { reviewList ->
+                    _recentReviewList.value = reviewList.firstOrNull()
+                }
+                .onFailure { error ->
+                    _recentReviewList.value = null
+                }
+        } catch (e: Exception) {
+            _recentReviewList.value = null
         }
     }
 
-    // TODO: 최근 토론 가져오기
+    private suspend fun getRecentDiscussionData() {
+        try {
+            val result = discussionRepository.getRecentDiscussion()
 
-
-    private fun getRecentEmotionShare() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _errorMessage.value = null
-
-            try {
-                val result = quoteRepository.getRecentQuote()
-
-                result
-                    .onSuccess { quote ->
-                        _recentEmotionShare.value = quote
+            result
+                .onSuccess { discussion ->
+                    if (discussion != null) {
+                        _hotDiscussions.value = discussion
+                    } else {
+                        _hotDiscussions.value = null
                     }
-                    .onFailure { error ->
-                        _errorMessage.value = "최근 감성 글귀 로딩 실패: ${error.message}"
-                        _recentEmotionShare.value = null
-                    }
-
-            } catch (e: Exception) {
-                _errorMessage.value = "최근 감성 글귀 로딩 중 알 수 없는 에러 발생: ${e.message}"
-                _recentEmotionShare.value = null
-            } finally {
-                _isLoading.value = false
-            }
+                }
+                .onFailure { error ->
+                    _hotDiscussions.value = null
+                }
+        } catch (e: Exception) {
+            println("ERROR: 최근 토론 중 예외 - ${e.message}")
+            _hotDiscussions.value = null
         }
     }
 
-    val hotDiscussions = DiscussionEntity(
-        boardId = 1,
-        bookId = 2,
-        memberId = 13,
-        title = "돌은 찐 사랑이 맞는가",
-        content = "",
-        createdAt = "24-12-03",
-        bookTitle = "로미오와 줄리엣",
-        author = "셰익스피어",
-        imageUrl = "",
-        userProfileImage = ""
-    )
+    private suspend fun getRecentEmotionShareData() {
+        try {
+            val result = quoteRepository.getRecentQuote()
+
+            result
+                .onSuccess { quote ->
+                    _recentEmotionShare.value = quote
+                }
+                .onFailure { error ->
+                    _recentEmotionShare.value = null
+                }
+        } catch (e: Exception) {
+            println("ERROR: 감성 공유 로딩 중 예외 - ${e.message}")
+            _recentEmotionShare.value = null
+        }
+    }
 }

@@ -37,6 +37,7 @@ fun HomeScreen(
 ) {
     val recommendedBooks by viewModel.recommendedBooks
     val recentReviewList by viewModel.recentReviewList
+    val hotDiscussions by viewModel.hotDiscussions
     val recentEmotionShare by viewModel.recentEmotionShare
     val isLoading by viewModel.isLoading
 
@@ -69,7 +70,6 @@ fun HomeScreen(
         }
 
         item {
-            println("DEBUG: recentReviewList = $recentReviewList")
             recentReviewList?.let { reviewList ->
                 RecentReviewSection(
                     review = reviewList,
@@ -86,15 +86,24 @@ fun HomeScreen(
         }
 
         item {
-            HotDiscussionsSection(
-                discussion = viewModel.hotDiscussions,
-                onDiscussionClick = { discussionId ->
-                    navigator.navigateToDiscussing()
-                },
-                onMoreClick = {
-                    navigator.navigateToDiscussDetail()
+            if (isLoading) {
+                println("DEBUG: 토론 데이터 로딩 중...")
+            } else {
+                hotDiscussions?.let { discussion ->
+                    println("DEBUG: 토론 섹션 표시 - ${discussion.title}")
+                    HotDiscussionsSection(
+                        discussion = discussion,
+                        onDiscussionClick = { discussionId ->
+                            navigator.navigateToDiscussing()
+                        },
+                        onMoreClick = {
+                            navigator.navigateToDiscussDetail()
+                        }
+                    )
+                } ?: run {
+                    println("DEBUG: 로딩 완료 후에도 표시할 토론이 없습니다")
                 }
-            )
+            }
         }
 
         item {

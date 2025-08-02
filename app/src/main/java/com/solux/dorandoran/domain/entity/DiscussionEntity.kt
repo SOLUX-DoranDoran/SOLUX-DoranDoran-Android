@@ -7,8 +7,9 @@ data class DiscussionEntity(
     val title: String,
     val content: String,
     val createdAt: String,
+    // UI에 필요한 추가 필드들
     val bookTitle: String,
     val author: String,
     val imageUrl: String,
-    val userProfileImage: String
+    val user: UserEntity? = null
 )
