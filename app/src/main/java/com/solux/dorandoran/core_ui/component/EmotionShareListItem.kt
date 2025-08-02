@@ -34,11 +34,13 @@ import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.domain.entity.EmotionShareEntity
+import com.solux.dorandoran.domain.entity.QuoteEntity
+import com.solux.dorandoran.domain.entity.QuoteLikeEntity
 
 @Composable
 fun EmotionShareListItem(
-    emotion: EmotionShareEntity,
+    quote: QuoteEntity,
+    quotelike: QuoteLikeEntity,
     itemIndex: Int,
     onLikeClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -61,7 +63,7 @@ fun EmotionShareListItem(
                 .padding(20.dp)
         ) {
             Text(
-                text = emotion.bookTitle,
+                text = quote.bookTitle,
                 style = baseBold,
                 color = Neutral60,
                 modifier = Modifier.fillMaxWidth()
@@ -84,7 +86,7 @@ fun EmotionShareListItem(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = emotion.content,
+                    text = quote.content,
                     style = baseRegular,
                     color = Neutral60,
                     modifier = Modifier.weight(1f)
@@ -112,7 +114,7 @@ fun EmotionShareListItem(
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = emotion.userName,
+                        text = quote.nickname,
                         style = smallRegular,
                         color = Neutral60
                     )
@@ -124,7 +126,7 @@ fun EmotionShareListItem(
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(
-                            id = if (emotion.isLiked) {
+                            id = if (quotelike.likeCount != 0) {
                                 R.drawable.ic_emotionsharescreen_heart_fill
                             } else {
                                 R.drawable.ic_emotionsharesreen_heart
@@ -137,9 +139,9 @@ fun EmotionShareListItem(
                     Spacer(modifier = Modifier.width(4.dp))
 
                     Text(
-                        text = emotion.likeCount.toString(),
+                        text = quotelike.likeCount.toString(),
                         style = smallRegular,
-                        color = if (emotion.isLiked) Button02 else Neutral60
+                        color = if (quotelike.likeCount != 0) Button02 else Neutral60
                     )
                 }
             }
