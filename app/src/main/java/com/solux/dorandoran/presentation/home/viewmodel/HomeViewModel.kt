@@ -47,6 +47,25 @@ class HomeViewModel @Inject constructor(
         loadAllData()
     }
 
+    fun refreshHomeData() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val recentReviewDeferred = async { getRecentReviewData() }
+                val recentEmotionShareDeferred = async { getRecentEmotionShareData() }
+                val recentDiscussionDeferred = async { getRecentDiscussionData() }
+
+                recentReviewDeferred.await()
+                recentEmotionShareDeferred.await()
+                recentDiscussionDeferred.await()
+            } catch (e: Exception) {
+                _errorMessage.value = "데이터 새로고침 중 오류가 발생했습니다: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
     private fun loadAllData() {
         viewModelScope.launch {
             _isLoading.value = true

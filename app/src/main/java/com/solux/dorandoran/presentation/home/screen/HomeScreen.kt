@@ -22,6 +22,7 @@ import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.viewmodel.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun HomeRoute(
@@ -40,6 +41,10 @@ fun HomeScreen(
     val hotDiscussions by viewModel.hotDiscussions
     val recentEmotionShare by viewModel.recentEmotionShare
     val isLoading by viewModel.isLoading
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshHomeData()
+    }
 
     LazyColumn(
         modifier = Modifier
