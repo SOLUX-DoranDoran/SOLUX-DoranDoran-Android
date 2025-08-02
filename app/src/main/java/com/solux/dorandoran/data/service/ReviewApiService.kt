@@ -27,6 +27,12 @@ interface ReviewApiService {
         @Query("size") size: Int = 10
     ): List<ResponseGetRecentReviewDto>
 
+    @GET("/api/reviews/recent")
+    suspend fun getRecentReview(
+        @Header("Authorization") authorization: String,
+        @Query("sort") sort: String = "recent"
+    ): ResponseGetRecentReviewDto
+
     @GET("/api/books/{bookId}/reviews")
     suspend fun getBookReviews(
         @Header("Authorization") authorization: String,

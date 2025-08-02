@@ -19,6 +19,8 @@ import com.solux.dorandoran.domain.entity.ReviewListEntity
 import com.solux.dorandoran.domain.repository.ReviewRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import com.solux.dorandoran.domain.entity.ReviewEntity
+import com.solux.dorandoran.data.mapper.toReviewEntity
 
 class ReviewRepositoryImpl @Inject constructor(
     private val reviewDataSource: ReviewDataSource,
@@ -43,6 +45,21 @@ class ReviewRepositoryImpl @Inject constructor(
                 size = size
             )
             response.map { it.toReviewListEntity() }
+        }
+    }
+
+    override suspend fun getRecentReview(
+        sort: String
+    ): Result<ReviewEntity?> {
+        return runCatching {
+            val token = getAccessToken()
+            val response = reviewDataSource.getRecentReview(
+                token = token,
+                sort = sort,
+                page = 1,
+                size = 1
+            )
+            response.toReviewEntity()
         }
     }
 

@@ -2,14 +2,14 @@ package com.solux.dorandoran.app.di
 
 
 import com.solux.dorandoran.data.repositoryimpl.BookRepositoryImpl
+import com.solux.dorandoran.data.repositoryimpl.DiscussionRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.ExampleRepositoryImpl
-import com.solux.dorandoran.data.repositoryimpl.QuoteLikeRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.QuoteRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.RecommendedBookRepositoryImpl
 import com.solux.dorandoran.data.repositoryimpl.ReviewRepositoryImpl
 import com.solux.dorandoran.domain.repository.BookRepository
+import com.solux.dorandoran.domain.repository.DiscussionRepository
 import com.solux.dorandoran.domain.repository.ExampleRepository
-import com.solux.dorandoran.domain.repository.QuoteLikeRepository
 import com.solux.dorandoran.domain.repository.QuoteRepository
 import com.solux.dorandoran.domain.repository.RecommendedBookRepository
 import com.solux.dorandoran.domain.repository.ReviewRepository
@@ -43,9 +43,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindQuoteLikeRepository(quoteLikeRepositoryImpl: QuoteLikeRepositoryImpl): QuoteLikeRepository
+    abstract fun bindReviewRepository(reviewRepositoryImpl: ReviewRepositoryImpl): ReviewRepository
 
     @Binds
     @Singleton
-    abstract fun bindReviewRepository(reviewRepositoryImpl: ReviewRepositoryImpl): ReviewRepository
+    abstract fun bindDiscussionRepository(discussionRepositoryImpl: DiscussionRepositoryImpl): DiscussionRepository
 }

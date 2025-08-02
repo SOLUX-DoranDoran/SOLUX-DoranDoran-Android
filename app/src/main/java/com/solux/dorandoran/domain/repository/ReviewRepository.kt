@@ -5,6 +5,7 @@ import com.solux.dorandoran.domain.entity.CommentCreateResponseEntity
 import com.solux.dorandoran.domain.entity.ReviewCommentsResponseEntity
 import com.solux.dorandoran.domain.entity.ReviewCreateResponseEntity
 import com.solux.dorandoran.domain.entity.ReviewDetailEntity
+import com.solux.dorandoran.domain.entity.ReviewEntity
 import com.solux.dorandoran.domain.entity.ReviewLikeResponseEntity
 import com.solux.dorandoran.domain.entity.ReviewListEntity
 
@@ -15,6 +16,10 @@ interface ReviewRepository {
         page: Int = 1,
         size: Int = 10
     ): Result<List<ReviewListEntity>>
+
+    suspend fun getRecentReview(
+        sort: String = "recent"
+    ): Result<ReviewEntity?>
 
     suspend fun getBookReviews(
         bookId: Long,

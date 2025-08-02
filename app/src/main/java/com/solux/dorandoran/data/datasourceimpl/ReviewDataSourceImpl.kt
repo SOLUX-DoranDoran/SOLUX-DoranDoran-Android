@@ -31,6 +31,18 @@ class ReviewDataSourceImpl @Inject constructor(
         )
     }
 
+    override suspend fun getRecentReview(
+        token: String,
+        sort: String,
+        page: Int,
+        size: Int
+    ): ResponseGetRecentReviewDto {
+        return reviewApiService.getRecentReview(
+            authorization = "Bearer $token",
+            sort = sort
+        )
+    }
+
     override suspend fun getBookReviews(
         token: String,
         bookId: Long,

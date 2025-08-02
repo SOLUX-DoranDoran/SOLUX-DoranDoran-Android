@@ -8,5 +8,8 @@ data class QuoteEntity (
     val content: String,
     val createdAt: String,
     val nickname: String,
-    val profileImage: String?
+    val profileImage: String?,
+    // 좋아요 관련 필드 추가
+    val isLiked: Boolean = false,
+    val likeCount: Int = 0
 )
