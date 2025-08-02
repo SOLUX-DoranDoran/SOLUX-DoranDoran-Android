@@ -41,6 +41,6 @@ object RetrofitModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient)
-        .baseUrl("")
+        .baseUrl("http://ec2-15-164-67-216.ap-northeast-2.compute.amazonaws.com:8080")
         .build()
 }

@@ -18,36 +18,66 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.core_ui.component.DiscussionTopicBox
 import com.solux.dorandoran.core_ui.theme.Background02
-import com.solux.dorandoran.domain.entity.DiscussionPageEntity
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
-import com.solux.dorandoran.domain.entity.DiscussionArgument
-import com.solux.dorandoran.presentation.discuss.DiscussViewModel
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview  
+import androidx.compose.runtime.LaunchedEffect
 import com.solux.dorandoran.core_ui.component.ArgumentInputBox
 import com.solux.dorandoran.core_ui.component.DiscussionCommentBox
-import com.solux.dorandoran.domain.entity.Comment
+import com.solux.dorandoran.domain.entity.DiscussPageEntity
+import com.solux.dorandoran.domain.entity.DiscussCommentEntity
+import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
+import com.solux.dorandoran.presentation.discuss.viewmodel.ArgumentViewModel
+import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussViewModel
 
+@Composable
+fun DiscussionTopicRoute(
+    navigator: DiscussNavigator,
+    discussionId: Int,
+    argumentId: Int, // 현재는 사용하지 않지만 나중을 위해 유지
+    viewModel: DiscussViewModel = hiltViewModel()
+) {
+    val discussion = viewModel.getDiscussionById(discussionId)
+
+    if (discussion != null) {
+        DiscussionTopicScreen(
+            discussion = discussion,
+            onBackClick = { navigator.navigateUp() },
+            onItemClick = { /* 필요시 구현 */ }
+        )
+    } else {
+        Text("토론을 찾을 수 없습니다")
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscussionTopicScreen(
-    discussion: DiscussionPageEntity,
-    argument: DiscussionArgument,
-    onBackClick:()->Unit={},
-    viewModel: DiscussViewModel = hiltViewModel(),
-    comment: Comment,
-    onItemClick: (DiscussionPageEntity) -> Unit
+    discussion: DiscussPageEntity,
+    onBackClick: () -> Unit = {},
+    argumentViewModel: ArgumentViewModel = hiltViewModel(),
+    onItemClick: (DiscussPageEntity) -> Unit
 ) {
-    val commentInputMap by viewModel.activeCommentInputMap
-    val isInputVisible = commentInputMap[argument.id] == true
-    var commentText by remember { mutableStateOf("") }
+    val commentInputMap by argumentViewModel.activeCommentInputMap
+    var argumentText by remember { mutableStateOf("") } // argument 입력용
 
+    // 토론 댓글들 로드
+    LaunchedEffect(discussion.id) {
+        argumentViewModel.loadCommentsForDiscussion(discussion.id)
+    }
+
+    // 🎯 임시 더미 데이터로 개설자 의견 생성
+    val authorArgument = DiscussCommentEntity(
+        id = 999,
+        memberNickname = "사용자${discussion.memberId}", // memberId로 임시 닉네임 생성
+        content = "이것은 임시 개설자 의견입니다. 실제로는 API에서 가져와야 합니다.",
+        createdAt = discussion.createdAt,
+        parentId = null
+    )
 
     Scaffold(
         topBar = {
@@ -70,19 +100,17 @@ fun DiscussionTopicScreen(
             )
         },
         containerColor = Background02,
-
         bottomBar = {
-            if (isInputVisible) {
-                ArgumentInputBox(
-                    inputText = commentText,
-                    onInputChange = { commentText = it },
-                    modifier = Modifier.padding(8.dp),
-                    onSubmit = {
-                        viewModel.submitComment(argument.id, commentText)
-                        commentText = "" // 입력창 초기화
-                    }
-                )
-            }
+            ArgumentInputBox(
+                inputText = argumentText,
+                onInputChange = { argumentText = it },
+                modifier = Modifier.padding(8.dp),
+                onSubmit = {
+                    // argument 제출
+                    println("새 의견 제출: $argumentText")
+                    argumentText = ""
+                }
+            )
         }
     ) { innerPadding ->
         LazyColumn(
@@ -93,28 +121,26 @@ fun DiscussionTopicScreen(
             item {
                 DiscussionTopicBox(
                     discussion = discussion,
+                    argument = authorArgument, // memberId 기반 더미 데이터
                     onClick = {},
                     modifier = Modifier
-                        .padding(vertical = 10.dp),
-                    argument = argument
+                        .padding(vertical = 10.dp)
                 )
             }
-
             item {
                 Spacer(modifier = Modifier.padding(vertical = 20.dp))
             }
 
-            items(discussion.arguments) { comment ->
+            items(argumentViewModel.getMainArguments()) { argument ->
+                val commentsForArgument = argumentViewModel.getCommentsForArgument(argument.id)
                 DiscussionCommentBox(
                     discussion = discussion,
                     argument = argument,
-                    comments = argument.comments,
-                    onAddComment = { viewModel.toggleCommentInput(argument.id) },
+                    comments = commentsForArgument,
+                    onAddComment = { argumentViewModel.toggleCommentInput(argument.id) },
                     isInputVisible = commentInputMap[argument.id] == true
                 )
             }
-
-
         }
     }
 }

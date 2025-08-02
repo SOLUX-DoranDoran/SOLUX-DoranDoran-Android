@@ -22,24 +22,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Background03
 import com.solux.dorandoran.core_ui.theme.Button02
-import com.solux.dorandoran.core_ui.theme.DoranDoranTheme
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral70
 import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.largeBold
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.domain.entity.DiscussionArgument
-import com.solux.dorandoran.domain.entity.DiscussionPageEntity
+import com.solux.dorandoran.domain.entity.BookInfoEntity
+import com.solux.dorandoran.domain.entity.DiscussPageEntity
 
 @Composable
 fun DiscussionBookBox(
-    discussion: DiscussionPageEntity,
+    discussion: DiscussPageEntity,
+    book: BookInfoEntity,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -86,7 +85,7 @@ fun DiscussionBookBox(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = discussion.authorName,
+                    text = book.author,
                     style = baseBold,
                     color = Neutral70
                 )
@@ -96,7 +95,7 @@ fun DiscussionBookBox(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                        text = discussion.publisher,
+                        text = book.publisher,
                         style = smallRegular,
                         color = Neutral80
                 )
@@ -104,41 +103,11 @@ fun DiscussionBookBox(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                        text = discussion.publishDate,
+                        text = book.publisherDate,
                         style = smallRegular,
                         color = Neutral80
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DiscussBookPreview() {
-    DoranDoranTheme {
-
-        val sampleArgument = DiscussionArgument(
-            id = 1,
-            name = "김눈송",
-            content = "저는 이렇게 생각해요.",
-            timestamp = "2025-07-20"
-        )
-
-        DiscussionBookBox(
-            discussion = DiscussionPageEntity(
-                id = 1,
-                name = "김눈송",
-                bookTitle = "로미오와 줄리엣",
-                discussionTopic = "둘은 찐 사랑이 맞는가",
-                bookImageUrl = "",
-                authorName = "셰익스피어",
-                publisher = "민음사",
-                publishDate = "2008년 2월 28일",
-                arguments = listOf(sampleArgument)
-            ),
-            onClick = { },
-            modifier = Modifier
-        )
     }
 }

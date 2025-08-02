@@ -10,13 +10,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.solux.dorandoran.presentation.auth.navigation.AuthNavigator
-import com.solux.dorandoran.presentation.auth.screen.SplashScreen
+import com.solux.dorandoran.presentation.auth.screen.SignInRoute
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
 import com.solux.dorandoran.presentation.discuss.navigation.discussNavGraph
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
 import com.solux.dorandoran.presentation.home.navigation.homeNavGraph
 import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.main.navigation.mainNavGraph
+import com.solux.dorandoran.presentation.main.screen.MainRoute
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.mypageNavGraph
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
@@ -32,7 +33,8 @@ fun DoranDoranNavHost(
     homeNavigator: HomeNavigator,
     discussNavigator: DiscussNavigator,
     reviewNavigator: ReviewNavigator,
-    mypageNavigator: MypageNavigator
+    mypageNavigator: MypageNavigator,
+    startDestination: String = "signin"
 ) {
     Box(
         modifier = modifier
@@ -41,9 +43,14 @@ fun DoranDoranNavHost(
     ) {
         NavHost(
             navController = navController,
-            startDestination = "splash",
+            startDestination = startDestination,
         ) {
-            composable("splash") { SplashScreen(navController = authNavigator.navController) }
+            composable("signin") {
+                SignInRoute(authNavigator)
+            }
+            composable("main") {
+                MainRoute(mainNavigator)
+            }
 
             mainNavGraph(
                 mainNavigator,

@@ -4,7 +4,6 @@ package com.solux.dorandoran.core_ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,34 +17,27 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Background03
-import com.solux.dorandoran.core_ui.theme.DoranDoranTheme
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral70
-import com.solux.dorandoran.core_ui.theme.Neutral80
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.baseRegular
-import com.solux.dorandoran.core_ui.theme.smallBold
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.core_ui.theme.smallRegular02
-import com.solux.dorandoran.domain.entity.DiscussionArgument
-import com.solux.dorandoran.domain.entity.DiscussionPageEntity
+import com.solux.dorandoran.domain.entity.DiscussCommentEntity
+import com.solux.dorandoran.domain.entity.DiscussPageEntity
 
 @Composable
 fun DiscussionBox(
-    discussion: DiscussionPageEntity,
+    discussion: DiscussPageEntity,
+    argument: DiscussCommentEntity,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -86,7 +78,7 @@ fun DiscussionBox(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = discussion.discussionTopic,
+                    text = discussion.content,
                     style = baseRegular,
                     color = Neutral60
                 )
@@ -107,42 +99,12 @@ fun DiscussionBox(
                     Spacer(modifier = Modifier.width(10.dp))
 
                     Text(
-                        text = discussion.name,
+                        text = argument.memberNickname,
                         style = smallRegular,
                         color = Neutral70
                     )
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DiscussBoxPreview() {
-    DoranDoranTheme {
-
-        val sampleArgument = DiscussionArgument(
-            id = 1,
-            name = "김눈송",
-            content = "저는 이렇게 생각해요.",
-            timestamp = "2025-07-20"
-        )
-
-        DiscussionBox(
-            discussion = DiscussionPageEntity(
-                id = 1,
-                name = "김눈송",
-                bookTitle = "로미오와 줄리엣",
-                discussionTopic = "둘은 찐 사랑이 맞는가",
-                bookImageUrl = "",
-                authorName = "",
-                publisher = "",
-                publishDate = "",
-                arguments = listOf(sampleArgument)
-            ),
-            onClick = { },
-            modifier = Modifier
-        )
     }
 }

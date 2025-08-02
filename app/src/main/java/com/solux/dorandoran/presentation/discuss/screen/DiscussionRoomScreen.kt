@@ -24,58 +24,68 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.solux.dorandoran.core_ui.component.DiscussionBookBox
-import com.solux.dorandoran.core_ui.component.DiscussionCommentBox
 import com.solux.dorandoran.core_ui.component.DiscussionRoomBox
 import com.solux.dorandoran.core_ui.theme.Background02
-import com.solux.dorandoran.domain.entity.DiscussionPageEntity
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
 import com.solux.dorandoran.core_ui.theme.Button02
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.baseBold
 import com.solux.dorandoran.core_ui.theme.largeBold
-import com.solux.dorandoran.domain.entity.DiscussionArgument
-import com.solux.dorandoran.presentation.discuss.DiscussViewModel
-
+import com.solux.dorandoran.domain.entity.BookInfoEntity
+import com.solux.dorandoran.domain.entity.DiscussCommentEntity
+import com.solux.dorandoran.domain.entity.DiscussPageEntity
+import com.solux.dorandoran.presentation.discuss.viewmodel.DiscussViewModel
+import com.solux.dorandoran.presentation.discuss.viewmodel.ArgumentViewModel
 
 @Composable
 fun DiscussionRoomRoute(
     navigator: DiscussNavigator,
     discussionId: Int,
-    viewModel: DiscussViewModel = hiltViewModel()
+    viewModel: DiscussViewModel = hiltViewModel(),
+    argumentViewModel: ArgumentViewModel = hiltViewModel()
 ) {
-
-
     val selectedDiscussion = viewModel.getDiscussionById(discussionId)
-
-
     if (selectedDiscussion != null) {
+        val book = viewModel.getBookInfoByBookId(selectedDiscussion.bookId)
         val bookDiscussions = viewModel.getDiscussionsForBook(selectedDiscussion.bookTitle)
-        DiscussionRoomScreen(
-            selectedBook = selectedDiscussion,
-            discussionsForBook = bookDiscussions,
-            onBackClick = { navigator.navigateUp() },
-            onAddClick = {},
-            onDiscussionClick = { clickedDiscussionId ->
-                navigator.navigateToDiscussionRoom(clickedDiscussionId)
-            }
-        )
-    }
-    else {
-        Text ("선택된 책을 찾을 수 없습니다")
+
+        book?.let { bookInfo ->
+            DiscussionRoomScreen(
+                selectedBook = selectedDiscussion,
+                book = book,
+                discussionsForBook = bookDiscussions,
+                argumentViewModel = argumentViewModel,
+                onBackClick = { navigator.navigateUp() },
+                onAddClick = {},
+                onDiscussionClick = { clickedDiscussionId ->
+                    navigator.navigateToDiscussionTopic(clickedDiscussionId, 0)
+                }
+            )
+        }
+    } else {
+        Text("선택된 책을 찾을 수 없습니다")
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscussionRoomScreen(
-    selectedBook: DiscussionPageEntity,
-    discussionsForBook: List<DiscussionPageEntity>,
-    onBackClick:()->Unit={},
-    onAddClick:()->Unit={},
-    onDiscussionClick:(Int)->Unit={}
-
+    selectedBook: DiscussPageEntity,
+    book: BookInfoEntity,
+    discussionsForBook: List<DiscussPageEntity>,
+    argumentViewModel: ArgumentViewModel,
+    onBackClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onDiscussionClick: (Int) -> Unit = {}
 ) {
+    val authorArgument = DiscussCommentEntity(
+        id = 999,
+        memberNickname = "사용자${selectedBook.memberId}", // memberId로 임시 닉네임 생성
+        content = "이것은 임시 개설자 의견입니다. 실제로는 API에서 가져와야 합니다.",
+        createdAt = selectedBook.createdAt,
+        parentId = null
+    )
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -104,27 +114,24 @@ fun DiscussionRoomScreen(
         containerColor = Background02,
         modifier = Modifier,
     ) { innerPadding ->
-
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp, vertical=8.dp)
-
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             item {
                 DiscussionBookBox(
                     discussion = selectedBook,
+                    book = book,
                     modifier = Modifier
                         .padding(8.dp),
                     onClick = {}
                 )
             }
-
             item {
                 Spacer(modifier = Modifier.height(20.dp))
                 Spacer(modifier = Modifier.width(5.dp))
             }
-
             item {
                 Text(
                     buildAnnotatedString {
@@ -139,17 +146,17 @@ fun DiscussionRoomScreen(
                     style = largeBold
                 )
             }
-
-            items(discussionsForBook) { discussion: DiscussionPageEntity ->
+            items(discussionsForBook) { discussion: DiscussPageEntity ->
                 DiscussionRoomBox(
                     discussion = discussion,
-                    onClick = { onDiscussionClick(discussion.id) },
+                    onClick = {
+                        println("Box Clicked")
+                        onDiscussionClick(discussion.id) },
                     modifier = Modifier
                         .padding(15.dp),
-                    argument = discussion.arguments.firstOrNull()
+                    argument = authorArgument
                 )
             }
-
         }
     }
 }

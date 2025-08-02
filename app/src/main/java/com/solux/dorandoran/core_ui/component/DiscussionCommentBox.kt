@@ -1,7 +1,5 @@
 package com.solux.dorandoran.core_ui.component
 
-
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -10,44 +8,32 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solux.dorandoran.core_ui.theme.Neutral60
 import com.solux.dorandoran.core_ui.theme.Neutral70
 import com.solux.dorandoran.core_ui.theme.baseRegular
 import com.solux.dorandoran.core_ui.theme.smallRegular
-import com.solux.dorandoran.domain.entity.DiscussionPageEntity
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.unit.Dp
 import com.solux.dorandoran.core_ui.theme.Background01
 import com.solux.dorandoran.core_ui.theme.Button02
-import com.solux.dorandoran.domain.entity.Comment
-import com.solux.dorandoran.domain.entity.DiscussionArgument
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,12 +50,12 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.theme.Background03
-
+import com.solux.dorandoran.domain.entity.DiscussCommentEntity
+import com.solux.dorandoran.domain.entity.DiscussPageEntity
 
 @Composable
 fun ArgumentBubble(
@@ -113,7 +99,6 @@ private fun DrawScope.drawBubbleShape(
                     cornerRadius = CornerRadius(cornerRadius)
                 )
             )
-
             val tailStartX = bubbleWidth - tailOffset
             val tailStartY = bubbleHeight
             moveTo(tailStartX, tailStartY)
@@ -135,7 +120,6 @@ private fun DrawScope.drawBubbleShape(
                     cornerRadius = CornerRadius(cornerRadius)
                 )
             )
-
             val tailStartX = bubbleStartX + tailOffset
             val tailStartY = bubbleHeight
             moveTo(tailStartX, tailStartY)
@@ -160,13 +144,11 @@ private fun DrawScope.drawBubbleShape(
     }
 }
 
-
-
 @Composable
 fun DiscussionCommentBox(
-    discussion: DiscussionPageEntity,
-    argument: DiscussionArgument,
-    comments: List<Comment> = emptyList(),
+    discussion: DiscussPageEntity,
+    argument: DiscussCommentEntity,
+    comments: List<DiscussCommentEntity>, // 수정: List로 변경
     onAddComment: (Int) -> Unit,
     isInputVisible: Boolean = false,
     modifier: Modifier = Modifier
@@ -180,7 +162,7 @@ fun DiscussionCommentBox(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             ArgumentBubble(
-                isOddPosition = true, // 오른쪽 꼬리라고 가정
+                isOddPosition = true,
                 modifier = Modifier
             ) {
                 Column(
@@ -197,63 +179,53 @@ fun DiscussionCommentBox(
                                 .background(Background03)
                                 .border(0.5.dp, Neutral70, CircleShape)
                         )
-
                         Spacer(modifier = Modifier.width(15.dp))
-
                         Column {
                             Spacer(modifier = Modifier.height(4.dp))
-
                             Text(
                                 text = argument.content,
                                 style = baseRegular
                             )
-
                             Spacer(modifier = Modifier.height(15.dp))
-
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    text = argument.name,
+                                    text = argument.memberNickname,
                                     style = smallRegular,
                                     color = Neutral60
                                 )
-
                                 Spacer(modifier = Modifier.width(5.dp))
-
                                 Box(
                                     modifier = Modifier
                                         .width(1.dp)
                                         .height(15.dp)
                                         .background(Neutral70)
                                 )
-
                                 Spacer(modifier = Modifier.width(5.dp))
-
                                 Text(
-                                    text = argument.timestamp,
+                                    text = argument.createdAt,
                                     style = smallRegular,
                                     color = Neutral70
                                 )
                             }
                         }
                     }
-
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    if (argument.comments.isNotEmpty()) {
+                    // 댓글들 표시
+                    if (comments.isNotEmpty()) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.padding(top = 8.dp)
                         ) {
-                            argument.comments.forEachIndexed { index, comment ->
+                            comments.forEachIndexed { index, comment ->
                                 CommentItem(
                                     comment = comment,
-                                    argument = argument,
                                     modifier = modifier
                                 )
-                                if (index < argument.comments.size - 1) {
+                                if (index < comments.size - 1) {
                                     Spacer(modifier = Modifier.height(8.dp))
                                 }
                             }
@@ -261,10 +233,9 @@ fun DiscussionCommentBox(
                     }
                 }
             }
-
             // 댓글 추가 버튼
             FloatingActionButton(
-                onClick = { onAddComment(discussion.id) },
+                onClick = { onAddComment(argument.id) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(top = 8.dp)
@@ -307,13 +278,10 @@ fun DiscussionCommentBox(
     }
 }
 
-
-
 @Composable
 private fun CommentItem(
-    argument: DiscussionArgument,
-    modifier: Modifier = Modifier,
-    comment: Comment
+    comment: DiscussCommentEntity,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.Top,
@@ -321,19 +289,17 @@ private fun CommentItem(
             .fillMaxWidth()
             .padding(start = 15.dp, end = 15.dp, top = 8.dp, bottom = 8.dp)
     ) {
-        // 댓글 인디케이터 (임시 아이콘)
+        // 댓글 인디케이터
         Icon(
             imageVector = Icons.Default.ArrowForward,
             contentDescription = "Reply icon",
             tint = Button02,
             modifier = Modifier.size(30.dp)
         )
-
         Spacer(modifier = Modifier.width(10.dp))
-
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                // 프로필 이미지 (임시)
+                // 프로필 이미지
                 Box(
                     modifier = Modifier
                         .size(37.dp)
@@ -341,42 +307,33 @@ private fun CommentItem(
                         .background(Background03)
                         .border(0.5.dp, Neutral70, CircleShape)
                 )
-
                 Spacer(modifier = Modifier.width(15.dp))
-
                 Column {
                     Spacer(modifier = Modifier.height(4.dp))
-
                     Text(
-                        text = argument.content,
+                        text = comment.content,
                         style = baseRegular
                     )
-
                     Spacer(modifier = Modifier.height(15.dp))
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = argument.name,
+                            text = comment.memberNickname,
                             style = smallRegular,
                             color = Neutral60
                         )
-
                         Spacer(modifier = Modifier.width(5.dp))
-
                         Box(
                             modifier = Modifier
                                 .width(1.dp)
                                 .height(15.dp)
                                 .background(Neutral70)
                         )
-
                         Spacer(modifier = Modifier.width(5.dp))
-
                         Text(
-                            text = argument.timestamp,
+                            text = comment.createdAt,
                             style = smallRegular,
                             color = Neutral70
                         )

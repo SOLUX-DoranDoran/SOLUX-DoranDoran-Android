@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.solux.dorandoran.R
 import com.solux.dorandoran.core_ui.component.BottomNavigationItem
+import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavHost
 import com.solux.dorandoran.presentation.discuss.navigation.DiscussNavigator
 import com.solux.dorandoran.presentation.discuss.screen.DiscussRoute
 import com.solux.dorandoran.presentation.home.navigation.HomeNavigator
@@ -38,7 +39,7 @@ import com.solux.dorandoran.presentation.main.navigation.MainNavigator
 import com.solux.dorandoran.presentation.mypage.navigation.MypageNavigator
 import com.solux.dorandoran.presentation.mypage.screen.MypageRoute
 import com.solux.dorandoran.presentation.review.navigation.ReviewNavigator
-import com.solux.dorandoran.presentation.review.screen.ReviewRoute
+import com.solux.dorandoran.presentation.review.screen.ReviewTotalRoute
 
 
 @Composable
@@ -57,23 +58,23 @@ fun MainScreen(
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     val items = listOf(
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_homescreen_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_homescreen),
             label = "홈"
         ),
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discussdetail_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_discussdetail),
             label = "토론"
         ),
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_reviewscreen_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_reviewscreen),
             label = "리뷰"
         ),
         BottomNavigationItem(
-            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_selected),
-            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_launcher_foreground),
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.ic_mypagescreen_clicked),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.ic_mypagescreen),
             label = "마이페이지"
         ),
     )
@@ -99,7 +100,7 @@ fun MainScreen(
                                 Text(
                                     text = item.label,
 
-                                )
+                                    )
                             },
                             selected = selectedItem == index,
                             onClick = { selectedItem = index },
@@ -120,22 +121,21 @@ fun MainScreen(
                     HomeRoute(navigator = HomeNavigator(navController = navController))
                 }
                 1 -> {
-                    DiscussRoute(navigator = DiscussNavigator(navController = navController))
+                    DiscussNavHost()
 
                 }
                 2 -> {
-                    ReviewRoute(navigator = ReviewNavigator(navController = navController))
+                    ReviewTotalRoute(navigator = ReviewNavigator(navController = navController))
                 }
                 3 -> {
                     MypageRoute(navigator = MypageNavigator(navController = navController))
                 }
-                }
+            }
         }
 
     }
 }
 
-// 눌러질때의 ripple 제거
 private object NoRippleTheme : RippleTheme {
     @Composable
     override fun defaultColor() = Color.Unspecified
