@@ -61,35 +61,6 @@ fun EmotionShare(
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
 
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(Background02)
-//    ) {
-//        Column(
-//            modifier = Modifier.fillMaxSize()
-//        ) {
-//            EmotionShareHeader(
-//                onBackClick = { navigator.navController.popBackStack() }
-//            )
-//
-//            LazyColumn(
-//                modifier = Modifier.fillMaxSize(),
-//                verticalArrangement = Arrangement.spacedBy(4.dp),
-//                contentPadding = PaddingValues(bottom = 100.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                itemsIndexed(viewModel.emotionShareList) { index, emotion ->
-//                    EmotionShareListItem(
-//                        quote = emotion,
-//                        itemIndex = index,
-//                        onLikeClick = {
-//                            viewModel.toggleLike(emotion.id)
-//                        }
-//                    )
-//                }
-//            }
-//        }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -99,7 +70,7 @@ fun EmotionShare(
             modifier = Modifier.fillMaxSize()
         ) {
             EmotionShareHeader(
-                onBackClick = { navigator.navController.popBackStack() }
+                onBackClick = { navigator.navigateToHome() }
             )
 
             when {
